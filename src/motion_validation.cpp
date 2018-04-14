@@ -1,4 +1,5 @@
 #include "../include/motion_validation.hpp"
+#include <iostream>
 
 using namespace std;
 
@@ -57,13 +58,15 @@ bool MotionValidation::validate_numbers(string x_origin, string x_destiny){
 }
 
 bool MotionValidation::is_there_a_piece_at_origin(int x, int y){
-  if(chess_board[x][y] != 0) return true;
+  if(chess_board[x][y] != 0){
+    return true;
+  }
   else return false;
 }
 
 bool MotionValidation::the_piece_is_mine(int x, int y, int turn){
-  if((turn and (chess_board[x][y] <= 6 and chess_board[x][y] > 0)) or
-    ((not turn) and chess_board[x][y] >= 7)){
+  if(((not turn) and (chess_board[x][y] <= 6 and chess_board[x][y] > 0)) or
+     (turn and chess_board[x][y] >= 7)){
     return true;
   }else{
     return false;
@@ -81,9 +84,7 @@ bool MotionValidation::validate_command(string x_origin, string y_origin,
   int z = number_coordinates[x_destiny];
   int k = fonetic_alphabet_coordinates[y_destiny];
  
-  if(validate_fonetic_words(y_origin, y_destiny) and
-    validate_numbers(x_origin, x_destiny) and
-    is_there_a_piece_at_origin(x, y) and
+  if(is_there_a_piece_at_origin(x, y) and
     the_piece_is_mine(x, y, turn) and
     the_piece_can_do_it(x, y, z, k)){
     return true;
