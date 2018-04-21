@@ -1,6 +1,7 @@
 #include <utility>
 #include <iostream>
 #include "../include/motion_validation.hpp"
+#include "../include/pieces_checker.hpp"
 
 using namespace std;
 
@@ -45,6 +46,8 @@ void initialize_statements(){
 int main(){
     initialize_statements();
     MotionValidation motion_validator = MotionValidation(chess_board);
-    bool resp = motion_validator.validate_command("TWO","ALPHA","TWO","DELTA",1);
+    motion_validator.initialize_dictionaries();
+
+    bool resp = motion_validator.validate_command("TWO","ALPHA","THREE","ALPHA",1);
     cout << "O resultado foi " << resp << endl;
 }

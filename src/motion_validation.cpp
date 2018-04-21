@@ -92,3 +92,4 @@ bool MotionValidation::validate_command(string x_origin, string y_origin,
     return false;
   }
 }
+
