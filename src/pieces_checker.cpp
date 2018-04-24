@@ -113,7 +113,8 @@ bool PiecesChecker::rook_checker(int x1, int y1, int x2, int y2, int turn){
 
 bool PiecesChecker::pawn_checker(int x1, int y1, int x2, int y2, int turn){
   bool is_a_valid_movement = false;
-  if(y1 == y2 and ((abs(x1 - x2) == 2 and (x1 == 1 or x1 == 7)) or 
+  //cout << "X1 " << x1 << " Y1 " << y1 << " X2 " << x2 << " Y2 " << y2 << endl;
+  if(y1 == y2 and ((abs(x1 - x2) == 2 and (x1 == 1 or x1 == 6)) or 
         (abs(x1 - x2) == 1))){
     if(not turn){
       if(x2 > x1){
@@ -132,6 +133,7 @@ bool PiecesChecker::pawn_checker(int x1, int y1, int x2, int y2, int turn){
       }
     }
   }
+ 
   return (is_a_valid_movement and look_for_pieces_at_destiny(x2, y2, turn));
 }
 

@@ -20,13 +20,13 @@ class MotionValidation {
     map<string,int> fonetic_alphabet_coordinates;
     map<string,int> number_coordinates;
     map<int,string> piece_types;
-    PiecesChecker piece_checker = PiecesChecker(chess_board);
+    PiecesChecker pieces_checker = PiecesChecker(chess_board);
 
     bool validate_fonetic_words(string, string);
     bool validate_numbers(string, string);
     bool is_there_a_piece_at_origin(int, int);
     bool the_piece_is_mine(int, int, int);
-    bool the_piece_can_do_it(int, int, int, int);
+    bool the_piece_can_do_it(int, int, int, int, int);
 };
 
 #endif

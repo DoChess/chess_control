@@ -68,25 +68,45 @@ bool MotionValidation::the_piece_is_mine(int x, int y, int turn){
   if(((not turn) and (chess_board[x][y] <= 6 and chess_board[x][y] > 0)) or
      (turn and chess_board[x][y] >= 7)){
     return true;
-  }else{
-    return false;
-  }
+  }else return false;
 }
 
-bool MotionValidation::the_piece_can_do_it(int x, int y,int z, int k){
-  return true;
+bool MotionValidation::the_piece_can_do_it(int x, int y,int z, int k, int turn){
+  bool can_do_it;
+  string piece_type = piece_types[chess_board[x][y]];
+
+  if(piece_type == "ROOK"){
+    can_do_it = pieces_checker.rook_checker(x, y, z, k, turn);
+  }
+  else if(piece_type == "KNIGHT"){
+    can_do_it = pieces_checker.knight_checker(x, y, z, k, turn);  
+  }
+  else if(piece_type == "BISHOP"){
+    can_do_it = pieces_checker.bishop_checker(x, y, z, k, turn);
+  }
+  else if(piece_type == "QUEEN"){
+    can_do_it = pieces_checker.queen_checker(x, y, z, k, turn);
+  }
+  else if(piece_type == "KING"){
+    can_do_it = pieces_checker.king_checker(x, y, z, k, turn);
+  }
+  else if(piece_type == "PAWN"){
+    can_do_it = pieces_checker.pawn_checker(x, y, z, k, turn);
+  }
+
+  return can_do_it;
 }
 
 bool MotionValidation::validate_command(string x_origin, string y_origin,
-  string x_destiny, string y_destiny,int turn){
+  string x_destiny, string y_destiny, int turn){
   int x = number_coordinates[x_origin];
   int y = fonetic_alphabet_coordinates[y_origin];
   int z = number_coordinates[x_destiny];
   int k = fonetic_alphabet_coordinates[y_destiny];
- 
+
   if(is_there_a_piece_at_origin(x, y) and
     the_piece_is_mine(x, y, turn) and
-    the_piece_can_do_it(x, y, z, k)){
+    the_piece_can_do_it(x, y, z, k, turn)){
     return true;
   }else{
     return false;
