@@ -1,26 +1,5 @@
 #include "../include/pieces_checker.hpp"
 
-bool PiecesChecker::look_for_pieces_in_the_way_rook(int x1, int y1, int x2, int y2){
-  if(x1 == x2){
-    for(int x = x1;x <= x2;++x){
-      for(int y = y1+1;y < y2;++y){
-        if(chess_board[x][y] != 0){
-          return false;
-        }
-      }
-    }
-  }else{
-    for(int x = x1+1;x < x2;++x){
-      for(int y = y1;y <= y2;++y){
-        if(chess_board[x][y] != 0){
-          return false;
-        }
-      }
-    }
-    return true;
-  }
-}
-
 bool PiecesChecker::look_for_pieces_in_the_way_bishop(int x1, int x2, int y1, int y2){
   int p1 = x1;
   int p2 = y1;
@@ -87,34 +66,9 @@ bool PiecesChecker::king_checker(int x1, int y1, int x2, int y2, int turn){
   }
 }
 
-//bool PiecesChecker::rook_checker(int x1, int y1, int x2, int y2, int turn){
-//  bool is_a_valid_movement = true;
-//  if(x1 == x2 or y1 == y2){
-//    if(y2 < y1){
-//      int aux;
-//      aux = y2;
-//      y2 = y1;
-//      y1 = aux;
-//      y1++;
-//    }
-//    if(x2 < x1){
-//      int aux;
-//      aux = x2;
-//      x2 = x1;
-//      x1 = aux;
-//      x1++;
-//    }
-//    is_a_valid_movement = look_for_pieces_in_the_way_rook(x1, y1, x2, y2);
-//  }else{
-//    is_a_valid_movement = false;
-//  }
-//
-//  return (is_a_valid_movement and look_for_pieces_at_destiny(x2, y2, turn));
-//}
-
 bool PiecesChecker::pawn_checker(int x1, int y1, int x2, int y2, int turn){
   bool is_a_valid_movement = false;
-  //cout << "X1 " << x1 << " Y1 " << y1 << " X2 " << x2 << " Y2 " << y2 << endl;
+
   if(y1 == y2 and ((abs(x1 - x2) == 2 and (x1 == 1 or x1 == 6)) or 
         (abs(x1 - x2) == 1))){
     if(not turn){
@@ -158,39 +112,34 @@ bool PiecesChecker::queen_checker(int x1, int y1, int x2, int y2, int turn){
   return is_a_valid_movement;
 }
 
-bool PiecesChecker::rook_checker(int fromRow, int fromCol, int toRow, int toCol, int turn)
+bool PiecesChecker::rook_checker(int x1, int y1, int x2, int y2, int turn)
 {
   int i;
-
-  // Attempt to move to the same cell
-  if (fromRow == toRow && fromCol == toCol)
+  if (x1 == x2 && y1 == y2)
     return false;
 
-  // Collision detection
-  if (fromRow == toRow) {
-    // Horizontal move
-    if (fromCol < toCol) {
-      // Move right
-      for (i = fromCol + 1; i <= toCol; ++i)
-        if (chess_board[fromRow][i] != 0 and !(i == toCol and look_for_pieces_at_destiny(fromRow, toCol, turn)))
+  if (x1 == x2) {
+    if (y1 < y2) {
+      for (i = y1 + 1; i <= y2; ++i)
+        if (chess_board[x1][i] != 0 and !(i == y2 and
+            look_for_pieces_at_destiny(x1, y2, turn)))
           return false;
     } else {
-      // Move left
-      for (i = fromCol - 1; i >= toCol; --i)
-        if (chess_board[fromRow][i] != 0 and !(i == toCol and look_for_pieces_at_destiny(fromRow, toCol, turn)))
+      for (i = y1 - 1; i >= y2; --i)
+        if (chess_board[x1][i] != 0 and !(i == y2 and
+            look_for_pieces_at_destiny(x1, y2, turn)))
           return false;
     }
-  } else if (fromCol == toCol) {
-    // Vertical move
-    if (fromRow < toRow) {
-      // Move down
-      for (i = fromRow + 1; i <= toRow; ++i)
-        if (chess_board[i][fromCol] != 0 and !(i == toRow and look_for_pieces_at_destiny(toRow, fromCol, turn)))
+  } else if (y1 == y2) {
+    if (x1 < x2) {
+      for (i = x1 + 1; i <= x2; ++i)
+        if (chess_board[i][y1] != 0 and !(i == x2 and
+            look_for_pieces_at_destiny(x2, y1, turn)))
           return false;
     } else {
-      // Move up
-      for (i = fromRow - 1; i >= toRow; --i)
-        if (chess_board[i][fromCol] != 0 and !(i == toRow and look_for_pieces_at_destiny(toRow, fromCol, turn)))
+      for (i = x1 - 1; i >= x2; --i)
+        if (chess_board[i][y1] != 0 and !(i == x2 and 
+            look_for_pieces_at_destiny(x2, y1, turn)))
           return false;
     }
   } else {

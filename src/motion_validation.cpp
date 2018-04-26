@@ -75,6 +75,9 @@ bool MotionValidation::the_piece_can_do_it(int x, int y,int z, int k, int turn){
   bool can_do_it;
   string piece_type = piece_types[chess_board[x][y]];
 
+  // moving to same position
+  if(x == z and y == k) return false;
+
   if(piece_type == "ROOK"){
     can_do_it = pieces_checker.rook_checker(x, y, z, k, turn);
   }

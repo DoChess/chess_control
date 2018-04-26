@@ -92,17 +92,19 @@ void test_pawn_movements(){
 
   //Normal movement
   int chess_board_3[8][8] = 
-   {{1,2,3,4,5,3,2,1},
-    {6,6,6,6,6,6,0,6},
-    {0,0,12,0,0,0,0,0},
-    {12,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,6,0},
-    {0,12,0,12,12,12,12,12},
-    {7,8,9,10,11,9,8,7}};
+   {{1 ,2 ,3 ,4 ,5 ,3 ,2 ,1 },
+    {6 ,6 ,6 ,6 ,6 ,6 ,0 ,6 },
+    {0 ,0 ,12,0 ,0 ,0 ,0 ,0 },
+    {12,0 ,0 ,0 ,0 ,0 ,0 ,0 },
+    {0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 },
+    {0 ,9 ,0 ,0 ,0 ,0 ,6 ,0 },
+    {0 ,12,0 ,12,12,12,12,12},
+    {7 ,8 ,9 ,10,11,9 ,8 ,7 }};
 
   MotionValidation motion_validator_3 = MotionValidation(chess_board_3);
   motion_validator_3.initialize_dictionaries();
+
+  run_piece_test_case("SIX","ALPHA","SIX","ALPHA",0, false, motion_validator_3);
 
   run_piece_test_case("SIX","ALPHA","SEVEN","ALPHA",0, false, motion_validator_3);
 
@@ -115,6 +117,10 @@ void test_pawn_movements(){
   run_piece_test_case("SIX","CHARLIE","SEVEN","CHARLIE",0, false, motion_validator_3);
 
   run_piece_test_case("FIVE","CHARLIE","SEVEN","CHARLIE",0, false, motion_validator_3);
+
+  run_piece_test_case("TWO","BRAVO","THREE","BRAVO",1, false, motion_validator_3);
+
+  run_piece_test_case("THREE","ALPHA","THREE","ALPHA",1, false, motion_validator_3);
 
   run_piece_test_case("THREE","ALPHA","TWO","ALPHA",1, false, motion_validator_3);
 
@@ -275,7 +281,11 @@ void test_rook_movements(){
   run_piece_test_case("FIVE","DELTA","FIVE","HOTEL",1, true, motion_validator_1);
 
   // Normal movement
+  run_piece_test_case("FIVE","DELTA","FIVE","DELTA",1, false, motion_validator_1);
+
   run_piece_test_case("FIVE","DELTA","THREE","ALPHA",1, false, motion_validator_1);
+
+  run_piece_test_case("FIVE","DELTA","TWO","DELTA",1, false, motion_validator_1);
 
   run_piece_test_case("FIVE","DELTA","FOUR","ALPHA",1, false, motion_validator_1);
 
@@ -288,22 +298,182 @@ void test_rook_movements(){
   run_piece_test_case("FIVE","HOTEL","SEVEN","HOTEL",0, false, motion_validator_1);
 }
 
-void test_queen_movements(){
-  //pass
-}
-
 void test_knight_movements(){
-  //pass
+  // Normal movement
+  int chess_board_1[8][8] = 
+   {{1 ,0 ,3 ,4 ,5 ,3 ,2 ,1 },
+    {6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 },
+    {0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 },
+    {0 ,0 ,0 ,0 ,0 ,8 ,0 ,0 },
+    {0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 },
+    {0 ,2 ,0 ,0 ,0 ,0 ,0 ,0 },
+    {12,12,12,12,12,12,12,12},
+    {7 ,8 ,9 ,10,11,9 ,0 ,7 }};
+
+  MotionValidation motion_validator_1 = MotionValidation(chess_board_1);
+  motion_validator_1.initialize_dictionaries();
+
+  run_piece_test_case("EIGHT","GOLF","SIX","HOTEL",0, true, motion_validator_1);
+
+  run_piece_test_case("EIGHT","GOLF","SIX","FOXTROT",0, true, motion_validator_1);
+
+  run_piece_test_case("ONE","BRAVO","THREE","ALPHA",1, true, motion_validator_1);
+
+  run_piece_test_case("ONE","BRAVO","THREE","CHARLIE",1, true, motion_validator_1);
+
+  // Capture movement
+  run_piece_test_case("THREE","BRAVO","ONE","ALPHA",0, true, motion_validator_1);
+
+  run_piece_test_case("THREE","BRAVO","ONE","CHARLIE",0, true, motion_validator_1);
+
+  run_piece_test_case("FIVE","FOXTROT","SEVEN","ECHO",1, true, motion_validator_1);
+
+  run_piece_test_case("FIVE","FOXTROT","SEVEN","GOLF",1, true, motion_validator_1);
+
+  // Normal movement
+  run_piece_test_case("THREE","BRAVO","THREE","ALPHA",0, false, motion_validator_1);
+
+  run_piece_test_case("THREE","BRAVO","ONE","BRAVO",0, false, motion_validator_1);
+
+  run_piece_test_case("THREE","BRAVO","FORTROT","ALPHA",0, false, motion_validator_1);
+
+  run_piece_test_case("FIVE","FOXTROT","SEVEN","FOXTROT",1, false, motion_validator_1);
+
+  run_piece_test_case("FIVE","FOXTROT","SEVEN","ALPHA",1, false, motion_validator_1);
 }
 
 void test_bishop_movements(){
-  //pass
+  // Normal movement
+  int chess_board_1[8][8] = 
+   {{1 ,2 ,3 ,4 ,5 ,0 ,2 ,1 },
+    {6 ,6 ,6 ,0 ,6 ,6 ,0 ,6 },
+    {0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 },
+    {0 ,0 ,0 ,6 ,0 ,0 ,0 ,0 },
+    {0 ,0 ,0 ,0 ,0 ,3 ,0 ,0 },
+    {0 ,0 ,9 ,0 ,6 ,0 ,0 ,0 },
+    {12,12,0 ,0 ,12,12,12,12},
+    {7 ,8 ,0 ,10,11,9 ,8 ,7 }};
+
+  MotionValidation motion_validator_1 = MotionValidation(chess_board_1);
+  motion_validator_1.initialize_dictionaries();
+
+  run_piece_test_case("THREE","CHARLIE","TWO","DELTA",1, true, motion_validator_1);
+
+  run_piece_test_case("THREE","CHARLIE","SEVEN","GOLF",1, true, motion_validator_1);
+
+  run_piece_test_case("THREE","CHARLIE","FIVE","ALPHA",1, true, motion_validator_1);
+
+  run_piece_test_case("FOUR","FOXTROT","THREE","GOLF",0, true, motion_validator_1);
+
+  run_piece_test_case("FOUR","FOXTROT","SIX","HOTEL",0, true, motion_validator_1);
+
+  run_piece_test_case("FOUR","FOXTROT","SIX","DELTA",0, true, motion_validator_1);
+
+  // Capture movement
+  run_piece_test_case("THREE","CHARLIE","EIGHT","HOTEL",1, true, motion_validator_1);
+  
+  run_piece_test_case("FOUR","FOXTROT","TWO","HOTEL",0, true, motion_validator_1);
+
+  // Normal movement
+  run_piece_test_case("FOUR","FOXTROT","THREE","ECHO",0, false, motion_validator_1);
+
+  run_piece_test_case("THREE","CHARLIE","TWO","BRAVO",1, false, motion_validator_1);
+}
+
+void test_queen_movements(){
+  // Normal movement
+  int chess_board_1[8][8] = 
+   {{1 ,2 ,3 ,3 ,5 ,0 ,2 ,1 },
+    {6 ,6 ,6 ,0 ,6 ,6 ,0 ,6 },
+    {0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 },
+    {0 ,0 ,0 ,6 ,0 ,0 ,0 ,0 },
+    {0 ,0 ,0 ,0 ,0 ,4 ,0 ,0 },
+    {0 ,0 ,10,0 ,6 ,0 ,0 ,0 },
+    {12,12,0 ,0 ,12,12,12,12},
+    {7 ,8 ,0 ,9,11,9 ,8 ,7 }};
+
+  MotionValidation motion_validator_1 = MotionValidation(chess_board_1);
+  motion_validator_1.initialize_dictionaries();
+
+  run_piece_test_case("THREE","CHARLIE","TWO","DELTA",1, true, motion_validator_1);
+
+  run_piece_test_case("THREE","CHARLIE","SEVEN","GOLF",1, true, motion_validator_1);
+
+  run_piece_test_case("THREE","CHARLIE","FIVE","ALPHA",1, true, motion_validator_1);
+
+  run_piece_test_case("FOUR","FOXTROT","THREE","GOLF",0, true, motion_validator_1);
+
+  run_piece_test_case("FOUR","FOXTROT","SIX","HOTEL",0, true, motion_validator_1);
+
+  run_piece_test_case("FOUR","FOXTROT","SIX","DELTA",0, true, motion_validator_1);
+
+  // Capture movement
+  run_piece_test_case("THREE","CHARLIE","EIGHT","HOTEL",1, true, motion_validator_1);
+  
+  run_piece_test_case("FOUR","FOXTROT","TWO","HOTEL",0, true, motion_validator_1);
+
+  // Normal movement
+  run_piece_test_case("FOUR","FOXTROT","THREE","ECHO",0, false, motion_validator_1);
+
+  run_piece_test_case("THREE","CHARLIE","TWO","BRAVO",1, false, motion_validator_1);
+
+  // Normal movement
+  int chess_board_2[8][8] = 
+   {{1 ,2 ,3 ,0 ,5 ,3 ,2 ,0 },
+    {6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 },
+    {0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 },
+    {0 ,0 ,0 ,10,0 ,0 ,0 ,4 },
+    {0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 },
+    {0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 },
+    {12,12,12,12,12,12,12,12},
+    {7 ,8 ,9 ,0 ,11,9 ,8 ,7 }};
+
+  MotionValidation motion_validator_2 = MotionValidation(chess_board_2);
+  motion_validator_2.initialize_dictionaries();
+
+  run_piece_test_case("FIVE","DELTA","THREE","DELTA",1, true, motion_validator_2);
+
+  run_piece_test_case("FIVE","DELTA","FIVE","ALPHA",1, true, motion_validator_2);
+
+  run_piece_test_case("FIVE","HOTEL","THREE","HOTEL",0, true, motion_validator_2);
+
+  run_piece_test_case("FIVE","HOTEL","FIVE","ECHO",0, true, motion_validator_2);
+
+  run_piece_test_case("FIVE","HOTEL","SIX","HOTEL",0, true, motion_validator_2);
+
+  // Capture movement
+  run_piece_test_case("FIVE","HOTEL","TWO","HOTEL",0, true, motion_validator_2);
+
+  run_piece_test_case("FIVE","HOTEL","FIVE","DELTA",0, true, motion_validator_2);
+
+  run_piece_test_case("FIVE","DELTA","SEVEN","DELTA",1, true, motion_validator_2);
+
+  run_piece_test_case("FIVE","DELTA","FIVE","HOTEL",1, true, motion_validator_2);
+
+  // Normal movement
+  run_piece_test_case("FIVE","DELTA","FIVE","DELTA",1, false, motion_validator_2);
+
+  run_piece_test_case("FIVE","DELTA","THREE","ALPHA",1, false, motion_validator_2);
+
+  run_piece_test_case("FIVE","DELTA","TWO","DELTA",1, false, motion_validator_2);
+
+  run_piece_test_case("FIVE","DELTA","FOUR","ALPHA",1, false, motion_validator_2);
+
+  run_piece_test_case("FIVE","DELTA","THREE","HOTEL",0, false, motion_validator_2);
+
+  run_piece_test_case("FIVE","DELTA","TWO","DELTA",1, false, motion_validator_2);
+
+  run_piece_test_case("FIVE","HOTEL","SEVEN","HOTEL",0, false, motion_validator_2);
+
 }
 
 int main(){
-  //test_pawn_movements();
-  //test_king_movements();
+  test_pawn_movements();
+  test_king_movements();
   test_rook_movements();
+  test_knight_movements();
+  test_bishop_movements();
+  test_queen_movements();
 
   if(false_negatives.size() != 0){
       cout << "The following test cases have failed when they should pass:" << endl << endl;

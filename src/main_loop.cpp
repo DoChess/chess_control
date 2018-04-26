@@ -48,8 +48,4 @@ int main(){
     motion_validator.initialize_dictionaries();
 
     bool resp = motion_validator.validate_command("SEVEN","CHARLIE","SIX","CHARLIE",0);
-    cout << "O resultado foi " << resp << endl;
-
-    bool resp2 = motion_validator.validate_command("SEVEN","CHARLIE","FIVE","CHARLIE",0);
-    cout << "O resultado foi " << resp2 << endl;
 }
