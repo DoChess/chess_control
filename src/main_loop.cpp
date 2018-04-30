@@ -32,8 +32,8 @@ int points_chess_board[17][17];
 coordinate CNC_position;
 
 void initialize_statements(){
-    for(int i = 0;i < 18;++i){
-      for( int j = 0;j < 18;++j){
+    for(int i = 0;i < 17;++i){
+      for( int j = 0;j < 17;++j){
         if(i % 2 != 0 and j % 2 != 0) points_chess_board[i][j] = 0;
         else points_chess_board[i][j] = 1;
       }
@@ -44,8 +44,8 @@ void initialize_statements(){
 
 int main(){
     initialize_statements();
+
     MotionValidation motion_validator = MotionValidation(chess_board);
     motion_validator.initialize_dictionaries();
-
-    bool resp = motion_validator.validate_command("SEVEN","CHARLIE","SIX","CHARLIE",0);
+    MotionControl motion_control = MotionControl(chess_board, points_chess_board);
 }
