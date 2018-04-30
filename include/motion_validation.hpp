@@ -7,11 +7,15 @@
 #include "pieces_checker.hpp"
 
 using namespace std;
+using par = pair<int,int>;
 
 class MotionValidation {
   public:
     void initialize_dictionaries();
     bool validate_command(string, string, string, string, int);
+    par is_in_check;
+    par white_king_position;
+    par black_king_position;
     MotionValidation(int (&p_chess_board)[8][8]):chess_board(p_chess_board){};
     ~MotionValidation(){};
 
@@ -27,6 +31,9 @@ class MotionValidation {
     bool is_there_a_piece_at_origin(int, int);
     bool the_piece_is_mine(int, int, int);
     bool the_piece_can_do_it(int, int, int, int, int);
+    void verify_check_for_all_pieces(int);
+    bool verify_if_king_is_in_check(int, int, int, int);
+    void its_possible_to_defend_king(int, int, int, int, int);
 };
 
 #endif

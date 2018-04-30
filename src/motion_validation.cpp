@@ -4,6 +4,10 @@
 using namespace std;
 
 void MotionValidation::initialize_dictionaries(){
+  is_in_check = make_pair(0,0);
+  white_king_position = make_pair(0,4);
+  black_king_position = make_pair(7,4); 
+
   fonetic_alphabet_coordinates = {
    {"ALPHA" , 0},
    {"BRAVO" , 1},
@@ -100,6 +104,59 @@ bool MotionValidation::the_piece_can_do_it(int x, int y,int z, int k, int turn){
   return can_do_it;
 }
 
+void MotionValidation::verify_check_for_all_pieces(int turn){
+  bool has_check = false;
+  for(int i = 0;i < 8;++i){
+    if(has_check) break;
+    for(int j = 0;j < 8;++j){
+      if(turn == 0 and chess_board[i][j] > 6 and 
+        the_piece_can_do_it(i, j, black_king_position.first, black_king_position.second, 0)){
+        has_check = true;
+        is_in_check.second = 1;
+        break;
+      }else if(turn == 1 and chess_board[i][j] <= 6 and
+               chess_board[i][j] > 0 and
+        the_piece_can_do_it(i, j, white_king_position.first, white_king_position.second, 1)){
+        has_check = true;
+        is_in_check.first = 1;
+        break;
+      }
+    }
+  }
+}
+
+void MotionValidation::its_possible_to_defend_king(int x_origin,
+                                       int y_origin,
+                                       int x_destiny,
+                                       int y_destiny,
+                                       int turn){
+  chess_board[x_destiny][y_destiny] = chess_board[x_origin][y_origin];
+  chess_board[x_origin][y_origin] = 0;
+  verify_check_for_all_pieces(turn);
+  chess_board[x_origin][y_origin] = chess_board[x_destiny][y_destiny];
+  chess_board[x_destiny][y_destiny] = 0;
+}
+
+bool MotionValidation::verify_if_king_is_in_check(int x_origin,
+    int y_origin,
+    int x_destiny,
+    int y_destiny){
+
+  if(is_in_check.first){
+    is_in_check.first = 0;
+    its_possible_to_defend_king(x_origin, y_origin, x_destiny ,y_destiny, 0); 
+
+    return (is_in_check.first == 0);
+
+  }else if(is_in_check.second){
+    is_in_check.second = 0;
+    its_possible_to_defend_king(x_origin, y_origin, x_destiny ,y_destiny, 1); 
+
+    return (is_in_check.second == 0);
+  }
+  return true;
+}
+
 bool MotionValidation::validate_command(string x_origin, string y_origin,
   string x_destiny, string y_destiny, int turn){
   int x = number_coordinates[x_origin];
@@ -109,10 +166,10 @@ bool MotionValidation::validate_command(string x_origin, string y_origin,
 
   if(is_there_a_piece_at_origin(x, y) and
     the_piece_is_mine(x, y, turn) and
-    the_piece_can_do_it(x, y, z, k, turn)){
+    the_piece_can_do_it(x, y, z, k, turn) and
+    verify_if_king_is_in_check(x, y, z, k)){
     return true;
   }else{
     return false;
   }
 }
-
