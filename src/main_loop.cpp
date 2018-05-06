@@ -3,7 +3,7 @@
 #include <queue>
 #include <sstream>
 #include "../include/motion_validation.hpp"
-#include "socket_connection.c"
+#include "shared_memory.cpp"
 
 using namespace std;
 
@@ -56,7 +56,6 @@ vector<string> split_command(string full_message){
   return coordinates;
 }
 
-
 int main(){
 
   initialize_statements();
@@ -65,36 +64,35 @@ int main(){
 
   bool resp = motion_validator.validate_command("SEVEN","CHARLIE","SIX","CHARLIE",0);
 
-
   char main_state;
   queue<string> front_messages;
   bool fix_on_grammar;
   int turn;
 
   initialize_statements();
+  attach_memory();
 
   string msg = "";
 
   while(1){
     //start listening 
-    msg = "start game";
-    string a;
+    msg = "11";
 
-    if(msg == "start game"){
-      init_server();
-      write(fd,"11",300);
-      main_state = '1';
+    if(msg == "11"){
+      string a(data);  
+      if(a == "None"){
+        strncpy(data, "11", SHM_SIZE);
+      }
 
       while(1){
         msg = "chess";
 
         if(msg == "chess"){
           //Comando para o front trocar a cor e indicar que está esperando o resto do comando;
-          front_messages.push("41");
 
-          while(!front_messages.empty()){
-            a = front_messages.front();front_messages.pop();
-            write(fd,a.c_str(),300);
+          string b(data);
+          if(b == "None"){
+            strncpy(data, "31", SHM_SIZE);
           }
 
           msg = "ECHO TWO ECHO FOUR MOVE";
@@ -106,23 +104,27 @@ int main(){
             vector<string> coordinates = split_command(msg);
             bool is_a_valid_movement = motion_validator.validate_command(coordinates[0],coordinates[1], coordinates[2], coordinates[3], turn);
 
-            //a = '3' + (is_a_valid_movement?'1':'0') + '2' + msg; 
-            a = "312" + msg;
-            write(fd,a.c_str(),300);
+            a = "3";
+            a += (is_a_valid_movement?'1':'0');
+            a += '2';
+            a += msg;
+
+            strncpy(data, a.c_str(), SHM_SIZE);
+            break;
 
           }else{
-            //a = '3' + '2' + '2' + msg;
-            a = "322" + msg;
-            write(fd,a.c_str(),300);
+            a = "322";
+            a += msg;
+            strncpy(data, a.c_str(), SHM_SIZE);
             printf("Invalid grammar result.\n");
             continue;
           }
-          //if(read(fd,rec_buff,300)!=0)
-          //  puts(rec_buff);
         }
       }
     }
+
   }
+    detach_memory();
 
   return 0;
 }
