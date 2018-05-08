@@ -102,3 +102,6 @@ ENV/
 
 # sphinx model base
 cmusphinx-en-us-8khz-5.2/
+
+# Temporary files.
+*.swp
