@@ -21,4 +21,4 @@ run_voice:
 all: build_chess build_voice
 
 clean:
-@rm -rf */obj/* */bin/*
+	@rm -rf */obj/* */bin/*

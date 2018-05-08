@@ -1,24 +1,39 @@
-BINFOLDER := bin/
-INCFOLDER := include/
-OBJFOLDER := obj/
-SRCFOLDER := source/
+# Exe files
+BIN := bin/
+# .hpp files
+#INC := include/
+# .cpp files
+SRC := src/
+# .o files
+OBJ := obj/
 
-CC := g++
-CFLAGS := -std=c++11 -Wall -ansi -Wshadow
-LINKER_FLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf
+COMPILER := g++
 
-SRCFILES := $(wildcard source/*.cpp)
+FLAGS := -std=c++11
 
-all: $(SRCFILES:source/%.cpp=obj/%.o)
-		$(CC) $(CFLAGS) $(LINKER_FLAGS) obj/*.o -o bin/finalBinary
+# Source files.
+# Add all files to be used in onde project here. 
 
-obj/%.o: source/%.cpp
-		$(CC) $(CFLAGS) $(LINKER_FLAGS) -c $< -o $@ -I./include
+# Concatenates all files to the project.
+CHESS := $(wildcard src/*.cpp)
+
+# Compile project. 
+all: create_folders $(CHESS:src/%.c=obj/%.o)
+	$(COMPILER) -o bin/chess $(CHESS) $(FLAGS)
+
+create_folders:
+	@mkdir -p $(OBJ) $(BIN)
+
+# Generate .o files.
+obj/%.o: src/%.cpp
+	$(COMPILER) $(FLAGS) -c $< -o $@ -I./include
+	$(COMPILER) $(FLAGS) -c ../utils/utils.c -o obj/utils.o -I../utils
+
+# Run the executable files.
+run: bin/chess
+	bin/chess
 
 .PHONY: clean
 clean:
-		rm -rf obj/*
-		rm -rf bin/*
-
-run:
-cd bin/ && ./finalBinary
+	rm -rf bin/*
+	rm -rf obj/*

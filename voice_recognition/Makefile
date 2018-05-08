@@ -3,7 +3,6 @@ BIN := bin/
 # .cpp files
 SRC := src/
 # .o files
-#OBJ := obj/
 
 COMPILER := g++
 
@@ -13,11 +12,11 @@ FLAGS := -DMODELDIR=\"`pkg-config --variable=modeldir pocketsphinx`\" `pkg-confi
 # Add all files to be used in onde project here. 
 
 # Concatenates all files to the project.
-CHESS := $(wildcard src/main.cpp)
+VOICE := $(wildcard src/main.cpp)
 
 # Compile project. 
-all: create_folders $(CHESS:src/%.c)
-	$(COMPILER) -o bin/voice $(CHESS) $(FLAGS)
+all: create_folders $(VOICE:src/%.c)
+	$(COMPILER) -o bin/voice $(VOICE) $(FLAGS)
 
 create_folders:
 	@mkdir -p $(BIN)

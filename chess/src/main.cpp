@@ -3,7 +3,7 @@
 #include <queue>
 #include <sstream>
 #include "../include/motion_validation.hpp"
-#include "shared_memory.cpp"
+#include "../utils/shared_memory.cpp"
 
 using namespace std;
 
