@@ -1,8 +1,7 @@
-#include "recognition.cpp"
+#include "../include/voice.hpp"
 
 using namespace std;
 
-//int main(int argc, char *argv[])
 int voice(bool hear_flag, string desired_command)
 {
 	if(hear_flag) {
@@ -21,14 +20,6 @@ int voice(bool hear_flag, string desired_command)
 								config = cmd_ln_parse_file_r(config, cont_args_def, cfg, FALSE);
 				}
 
-// This code is needed only when using arguments.
-/*
-				if (config == NULL || (cmd_ln_str_r(config, "-infile") == NULL && cmd_ln_boolean_r(config, "-inmic") == FALSE)) {
-								E_INFO("Specify '-infile <file.wav>' to recognize from file or '-inmic yes' to recognize from microphone.\n");
-								cmd_ln_free_r(config);
-								return 1;
-				}
-*/
 				ps_default_search_args(config);
 				ps = ps_init(config);
 				if (ps == NULL) {

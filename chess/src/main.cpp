@@ -5,6 +5,8 @@
 #include "../include/motion_validation.hpp"
 #include "../utils/shared_memory.cpp"
 
+#include "voice.cpp"
+
 using namespace std;
 
 using coordinate = pair<int,int>;
@@ -125,6 +127,12 @@ int main(){
 
   }
     detach_memory();
+
+  // VOICE RECOGNITION
+  bool hear_flag = true;
+  string desired_command = "chess";
+
+  voice(hear_flag, desired_command);
 
   return 0;
 }

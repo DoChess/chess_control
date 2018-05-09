@@ -11,7 +11,7 @@ COMPILER := g++
 
 VOICE_FLAGS := -DMODELDIR=\"`pkg-config --variable=modeldir pocketsphinx`\" `pkg-config --cflags --libs pocketsphinx sphinxbase`
 
-FLAGS := -std=c++11 $(VOICE_FLAGS)
+FLAGS := $(VOICE_FLAGS)
 
 # Source files.
 # Add all files to be used in onde project here. 
