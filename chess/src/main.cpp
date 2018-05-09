@@ -59,7 +59,7 @@ vector<string> split_command(string full_message){
 }
 
 int main(){
-
+/*
   initialize_statements();
   MotionValidation motion_validator = MotionValidation(chess_board);
   motion_validator.initialize_dictionaries();
@@ -127,7 +127,7 @@ int main(){
 
   }
     detach_memory();
-
+*/
   // VOICE RECOGNITION
   bool hear_flag = true;
   string desired_command = "chess";
