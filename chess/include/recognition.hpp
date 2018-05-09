@@ -1,3 +1,6 @@
+#ifndef RECOGNITION_H
+#define RECOGNITION_H
+
 #include <string>
 
 #include <cstdio>
@@ -59,3 +62,5 @@ static void sleep_msec(int32 ms);
  *     }
  */
 static void recognize_from_microphone(string desired_command);
+
+#endif

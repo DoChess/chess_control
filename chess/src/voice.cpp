@@ -2,16 +2,19 @@
 
 using namespace std;
 
-int voice(bool hear_flag, string desired_command)
+void voice(bool hear_flag, string desired_command)
 {
 	if(hear_flag) {
 				char const *cfg;
 
 				int argc=3;
 				char *argv[3];
-				argv[0] = "./testing_mic";
-				argv[1] = "-argfile";
-				argv[2] = "arguments.txt";
+				char argv0[14] = "./testing_mic";
+				char argv1[9] = "-argfile";
+				char argv2[14] = "arguments.txt";
+				argv[0] = argv0;
+				argv[1] = argv1;
+				argv[2] = argv2;
 
 				config = cmd_ln_parse_r(NULL, cont_args_def, argc, argv, TRUE);
 
@@ -24,7 +27,7 @@ int voice(bool hear_flag, string desired_command)
 				ps = ps_init(config);
 				if (ps == NULL) {
 								cmd_ln_free_r(config);
-								return 1;
+                exit(1);
 				}
 
 				E_INFO("%s COMPILED ON: %s, AT: %s\n\n", argv[0], __DATE__, __TIME__);
@@ -37,7 +40,5 @@ int voice(bool hear_flag, string desired_command)
 
 				ps_free(ps);
 				cmd_ln_free_r(config);
-
-				return 0;
 	}
 }

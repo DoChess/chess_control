@@ -1,4 +1,5 @@
 #include "../include/recognition.hpp"
+#include <sys/select.h>
 
 using namespace std;
 
