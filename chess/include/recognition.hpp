@@ -63,4 +63,6 @@ static void sleep_msec(int32 ms);
  */
 static void recognize_from_microphone(string desired_command);
 
+void voice(bool hear_flag, string desired_command);
+
 #endif

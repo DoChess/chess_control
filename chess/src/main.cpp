@@ -5,7 +5,7 @@
 #include "../include/motion_validation.hpp"
 #include "../utils/shared_memory.cpp"
 
-#include "../include/voice.hpp"
+#include "../include/recognition.hpp"
 
 using namespace std;
 
