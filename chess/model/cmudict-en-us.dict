@@ -1,7 +1,12 @@
 chess CH EH S
-block B L AA K
 move M UW V
-tango T AE NG G OW
+begin B IH G IH N
+end EH N D
+stop S T AA P
+game G EY M
+resume R IH Z UW M
+resume(2) R IY Z UW M
+resume(3) R EH Z AH M EY2
 
 alpha AE L F AH
 bravo B R AA V OW

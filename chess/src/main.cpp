@@ -167,16 +167,23 @@ int main(){
 
   detach_memory();
     
+/*
   // VOICE RECOGNITION
   bool hear_flag = false;
   string desired_command = HEAR_ERROR;
-
   string command = "";
+
+  command = hear_begin(hear_flag, desired_command);
+  printf("\n\n\nMAIN: %s\n\n\n", command.c_str());
+
   command = hear_chess(hear_flag, desired_command);
   printf("\n\n\nMAIN: %s\n\n\n", command.c_str());
 
   command = hear_move(hear_flag, desired_command);
   printf("\n\n\nMAIN: %s\n\n\n", command.c_str());
 
+  command = hear_end(hear_flag, desired_command);
+  printf("\n\n\nMAIN: %s\n\n\n", command.c_str());
+*/
   return 0;
 }

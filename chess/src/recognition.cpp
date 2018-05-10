@@ -183,19 +183,21 @@ string voice(bool hear_flag, string desired_command)
 
 string hear_begin(bool hear_flag, string desired_command) {
 				hear_flag = true;
-				desired_command = "start game";
+				desired_command = "begin game";
 				voice(hear_flag, desired_command);
+				return desired_command;
 }
 
 string hear_end(bool hear_flag, string desired_command) {
 				hear_flag = true;
 				desired_command = "end game";
 				voice(hear_flag, desired_command);
+				return desired_command;
 }
 
 string hear_chess(bool hear_flag, string desired_command) {
 				hear_flag = true;
-				desired_command = HEAR_COMMAND;
+				desired_command = CHESS_COMMAND;
 				desired_command = voice(hear_flag, desired_command);
 				return desired_command;
 }
@@ -207,7 +209,16 @@ string hear_move(bool hear_flag, string desired_command) {
 					return desired_command;
 }
 
-string hear_start(bool hear_flag, string desired_command) {
-}
 string hear_stop(bool hear_flag, string desired_command){
+				hear_flag = true;
+				desired_command = "stop game";
+				voice(hear_flag, desired_command);
+				return desired_command;
+}
+
+string hear_resume(bool hear_flag, string desired_command){
+				hear_flag = true;
+				desired_command = "resume game";
+				voice(hear_flag, desired_command);
+				return desired_command;
 }

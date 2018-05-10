@@ -1,5 +1,5 @@
 #JSGF V1.0;
 grammar do_movement;
-public <command> = (chess | <fonetic_word> <number> <fonetic_word> <number> move);
+public <command> = (chess | begin game | end game | stop game | resume game | <fonetic_word> <number> <fonetic_word> <number> move);
 <fonetic_word> = (alpha | bravo | charlie | delta | echo | foxtrot | golf | hotel);
 <number> = (one | two | three | four | five | six | seven | eight);
