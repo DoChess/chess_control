@@ -62,8 +62,11 @@ static void sleep_msec(int32 ms)
  *        print utterance result;
  *     }
  */
-static void recognize_from_microphone(string desired_command)
+static string recognize_from_microphone(bool hear_flag, string desired_command)
 {
+				// Returns the value talked. !ERROR!->BAD word->GOOD
+				string command = HEAR_ERROR;
+
 				ad_rec_t *ad;
 				int16 adbuf[2048];
 				uint8 utt_started, in_speech;
@@ -83,7 +86,7 @@ static void recognize_from_microphone(string desired_command)
 				E_INFO("Ready....\n");
 
 				// Control listening.
-				while(true){
+				while(hear_flag){
 									if ((k = ad_read(ad, adbuf, 2048)) < 0){
 													E_FATAL("Failed to read audio\n");
 									}
@@ -103,17 +106,20 @@ static void recognize_from_microphone(string desired_command)
 													/* speech -> silence transition, time to start new utterance  */
 													ps_end_utt(ps);
 													hyp = ps_get_hyp(ps, NULL );
-													// If uderstand somethig. So print it.
 													if (hyp != NULL) {
 																	// Print the value recognized.
-																	printf("\n\n\n\n\n");
-																	printf("%s\n", hyp);
-																	if(!strcmp(hyp, desired_command.c_str())){ 
-																		printf("\n\n\n\n\n");
+																	printf("\n\n\n\n\n%s\n\n\n\n\n", hyp);
+																	if(desired_command == HEAR_COMMAND){ 
+																		if(desired_command == CHESS_COMMAND){ 
+																			command = hyp;
+																			printf("Stop listening\n");
+																			hear_flag = false;
+																		}
+																	} else if(!strcmp(hyp, desired_command.c_str())){ 
+																		command = hyp;
 																		printf("Stop listening\n");
-																		exit(1);
+																		hear_flag = false;
 																	}
-																	printf("\n\n\n\n\n");
 																	fflush(stdout);
 													}
 	
@@ -125,10 +131,12 @@ static void recognize_from_microphone(string desired_command)
 								sleep_msec(100);
 				}
 				ad_close(ad);
+				return command;
 }
 
-void voice(bool hear_flag, string desired_command)
+string voice(bool hear_flag, string desired_command)
 {
+	string command="";
 	if(hear_flag) {
 				char const *cfg;
 
@@ -160,10 +168,47 @@ void voice(bool hear_flag, string desired_command)
 				if (cmd_ln_str_r(config, "-infile") != NULL) {
 								// nothing
 				} else if (cmd_ln_boolean_r(config, "-inmic")) {
-								recognize_from_microphone(desired_command);
+								command = recognize_from_microphone(hear_flag, desired_command);
+								if(command == HEAR_ERROR){
+												printf("Error when runing recognize_from_microphone()!");
+												exit(1);
+								}
 				}
 
 				ps_free(ps);
 				cmd_ln_free_r(config);
 	}
+	return command;
+}
+
+string hear_begin(bool hear_flag, string desired_command) {
+				hear_flag = true;
+				desired_command = "start game";
+				voice(hear_flag, desired_command);
+}
+
+string hear_end(bool hear_flag, string desired_command) {
+				hear_flag = true;
+				desired_command = "end game";
+				voice(hear_flag, desired_command);
+}
+
+string hear_move(bool hear_flag, string desired_command) {
+				string command = "";
+				hear_flag = true;
+				desired_command = CHESS_COMMAND;
+				command = voice(hear_flag, desired_command);
+				if(command == desired_command) {
+					hear_flag = true;
+					desired_command = HEAR_COMMAND;
+					command = voice(hear_flag, desired_command);
+				} else {
+					printf("Error when needed to hear CHESS\n");
+					exit(1);
+				}
+}
+
+string hear_start(bool hear_flag, string desired_command) {
+}
+string hear_stop(bool hear_flag, string desired_command){
 }

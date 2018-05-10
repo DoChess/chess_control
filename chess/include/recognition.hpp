@@ -106,6 +106,12 @@ static int check_wav_header(char *header, int expected_sr);
 
 static void sleep_msec(int32 ms);
 
+static string HEAR_ERROR = "!ERROR!";
+
+static string HEAR_COMMAND = "!COMMAND!";
+
+static string CHESS_COMMAND = "chess";
+
 /*
  * Main utterance processing loop:
  *     for (;;) {
@@ -114,8 +120,11 @@ static void sleep_msec(int32 ms);
  *        print utterance result;
  *     }
  */
-static void recognize_from_microphone(string desired_command);
+static string recognize_from_microphone(bool hear_flag, string desired_command);
 
-void voice(bool hear_flag, string desired_command);
+string voice(bool hear_flag, string desired_command);
 
+string hear_begin(bool hear_flag, string desired_command);
+
+string hear_move(bool hear_flag, string desired_command);
 #endif

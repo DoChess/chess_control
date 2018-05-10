@@ -6,6 +6,7 @@
 #include "../utils/shared_memory.cpp"
 #include "../include/motion_control.hpp"
 
+// Voice recognition include.
 #include "../include/recognition.hpp"
 
 using namespace std;
@@ -163,14 +164,16 @@ int main(){
     }
 
   }
+
   detach_memory();
-
+    
   // VOICE RECOGNITION
-  /*
-     bool hear_flag = true;
-     string desired_command = "chess";
+  bool hear_flag = false;
+  string desired_command = HEAR_ERROR;
 
-     voice(hear_flag, desired_command);
-     */
+  string command = "";
+  command = hear_move(hear_flag, desired_command);
+  printf("\n\n\nMAIN: %s\n\n\n", command.c_str());
+
   return 0;
 }
