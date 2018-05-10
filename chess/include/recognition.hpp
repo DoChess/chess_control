@@ -126,5 +126,7 @@ string voice(bool hear_flag, string desired_command);
 
 string hear_begin(bool hear_flag, string desired_command);
 
+string hear_chess(bool hear_flag, string desired_command);
+
 string hear_move(bool hear_flag, string desired_command);
 #endif

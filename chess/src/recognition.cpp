@@ -110,7 +110,7 @@ static string recognize_from_microphone(bool hear_flag, string desired_command)
 																	// Print the value recognized.
 																	printf("\n\n\n\n\n%s\n\n\n\n\n", hyp);
 																	if(desired_command == HEAR_COMMAND){ 
-																		if(desired_command == CHESS_COMMAND){ 
+																		if(strcmp(hyp, CHESS_COMMAND.c_str())){ 
 																			command = hyp;
 																			printf("Stop listening\n");
 																			hear_flag = false;
@@ -193,19 +193,18 @@ string hear_end(bool hear_flag, string desired_command) {
 				voice(hear_flag, desired_command);
 }
 
-string hear_move(bool hear_flag, string desired_command) {
-				string command = "";
+string hear_chess(bool hear_flag, string desired_command) {
 				hear_flag = true;
-				desired_command = CHESS_COMMAND;
-				command = voice(hear_flag, desired_command);
-				if(command == desired_command) {
+				desired_command = HEAR_COMMAND;
+				desired_command = voice(hear_flag, desired_command);
+				return desired_command;
+}
+
+string hear_move(bool hear_flag, string desired_command) {
 					hear_flag = true;
 					desired_command = HEAR_COMMAND;
-					command = voice(hear_flag, desired_command);
-				} else {
-					printf("Error when needed to hear CHESS\n");
-					exit(1);
-				}
+					desired_command = voice(hear_flag, desired_command);
+					return desired_command;
 }
 
 string hear_start(bool hear_flag, string desired_command) {
