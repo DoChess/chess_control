@@ -16,14 +16,15 @@ class MotionValidation {
     par is_in_check;
     par white_king_position;
     par black_king_position;
+    map<string,int> fonetic_alphabet_coordinates;
+    map<string,int> number_coordinates;
+    map<int,string> piece_types;
+
     MotionValidation(int (&p_chess_board)[8][8]):chess_board(p_chess_board){};
     ~MotionValidation(){};
 
   private:
     int (&chess_board)[8][8];
-    map<string,int> fonetic_alphabet_coordinates;
-    map<string,int> number_coordinates;
-    map<int,string> piece_types;
     PiecesChecker pieces_checker = PiecesChecker(chess_board);
 
     bool validate_fonetic_words(string, string);

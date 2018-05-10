@@ -75,6 +75,7 @@ int main(){
   string msg = "";
 
   while(1){
+
     //start listening 
     msg = "11";
 
