@@ -139,7 +139,7 @@ int main(){
               CNC_position.second = y_destiny;
 
             }else{
-              printf("O Comando foi invalido");
+              printf("Invalid command error\n");
               // Mandar sinal para o front
               continue;
             }
