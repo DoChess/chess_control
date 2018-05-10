@@ -4,6 +4,7 @@
 #include <sstream>
 #include "../include/motion_validation.hpp"
 #include "../utils/shared_memory.cpp"
+#include "../include/motion_control.hpp"
 
 #include "../include/recognition.hpp"
 
@@ -59,24 +60,36 @@ vector<string> split_command(string full_message){
 }
 
 int main(){
+  // Investigate why it musts be inside main
+  queue<string> commands_queue;
+
   initialize_statements();
   MotionValidation motion_validator = MotionValidation(chess_board);
   motion_validator.initialize_dictionaries();
 
-  bool resp = motion_validator.validate_command("SEVEN","CHARLIE","SIX","CHARLIE",0);
+  MotionControl motion_control = MotionControl(chess_board, points_chess_board,
+      commands_queue);
 
   char main_state;
   queue<string> front_messages;
   bool fix_on_grammar;
-  int turn;
+  int turn = 1;
 
   initialize_statements();
   attach_memory();
 
   string msg = "";
 
-  while(1){
+  // Added to be used on movimentation
+  int x_origin;
+  int y_origin; 
+  int x_destiny;
+  int y_destiny;
 
+  bool is_a_capture_movement;
+  bool is_a_valid_movement;
+
+  while(1){
     //start listening 
     msg = "11";
 
@@ -104,7 +117,31 @@ int main(){
           if(fix_on_grammar){
             main_state = 2;
             vector<string> coordinates = split_command(msg);
-            bool is_a_valid_movement = motion_validator.validate_command(coordinates[0],coordinates[1], coordinates[2], coordinates[3], turn);
+            is_a_valid_movement = motion_validator.validate_command(coordinates[1],coordinates[0], coordinates[3], coordinates[2], turn);
+
+            if(is_a_valid_movement){
+              x_origin = (motion_validator.number_coordinates[coordinates[1]] * 2) + 1;
+              y_origin = (motion_validator.fonetic_alphabet_coordinates[coordinates[0]] * 2) + 1;
+              x_destiny = (motion_validator.number_coordinates[coordinates[3]] * 2) + 1;
+              y_destiny = (motion_validator.fonetic_alphabet_coordinates[coordinates[2]] * 2) + 1;
+
+              // Calculating commands to send to microcontroller
+              motion_control.generate_commands(x_origin, y_origin, x_destiny,
+                y_destiny, CNC_position.first, CNC_position.second);
+
+              while(not commands_queue.empty()){
+                string word = commands_queue.front(); commands_queue.pop();
+              }
+            
+              // Update CNC position in memory
+              CNC_position.first = x_destiny;
+              CNC_position.second = y_destiny;
+
+            }else{
+              printf("O Comando foi invalido");
+              // Mandar sinal para o front
+              continue;
+            }
 
             a = "3";
             a += (is_a_valid_movement?'1':'0');
@@ -126,14 +163,14 @@ int main(){
     }
 
   }
-    detach_memory();
+  detach_memory();
 
   // VOICE RECOGNITION
-/*
-  bool hear_flag = true;
-  string desired_command = "chess";
+  /*
+     bool hear_flag = true;
+     string desired_command = "chess";
 
-  voice(hear_flag, desired_command);
-*/
+     voice(hear_flag, desired_command);
+     */
   return 0;
 }

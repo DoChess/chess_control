@@ -19,15 +19,15 @@ class MotionControl {
 
     ~MotionControl(){};
     
-    queue<string> commands_queue;
+    queue<string> &commands_queue;
     void get_path(int, int, int, int);
     void switch_on_magnet();
     void switch_off_magnet();
     void move_CNC_to_origin_cell(int, int); 
-    bool is_a_capture_movement(int, int);
-    void generate_commands(int, int, int, int, bool, int, int);
+    void generate_commands(int, int, int, int, int, int);
     
   private:
+    bool is_it_a_capture_movement(int, int);
     int (&chess_board)[8][8];
     int (&points_chess_board)[17][17];
 };

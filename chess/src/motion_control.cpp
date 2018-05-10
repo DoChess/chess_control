@@ -2,12 +2,13 @@
 
 void MotionControl::generate_commands(int x_origin, int y_origin,
                                       int x_destiny, int y_destiny,
-                                      bool is_a_capture_movement,
                                       int CNC_x, int CNC_y){  
   int x_out = 32;
   int y_out = 32;
 
-  if(is_a_capture_movement == true){
+  bool is_a_capture = is_it_a_capture_movement(x_destiny, y_destiny);
+
+  if(is_a_capture == true){
     // Moving CNC to origin cell
     switch_off_magnet();
     get_path(CNC_x, CNC_y, x_destiny, y_destiny);
@@ -24,7 +25,7 @@ void MotionControl::generate_commands(int x_origin, int y_origin,
     get_path(x_origin, y_origin, x_destiny, y_destiny);
     switch_off_magnet();
 
-  }else if(is_a_capture_movement == false){
+  }else if(is_a_capture == false){
     // Moving CNC to origin cell
     switch_off_magnet();
     get_path(CNC_x, CNC_y, x_origin, y_origin);
@@ -76,8 +77,10 @@ void MotionControl::get_path(int x_origin, int y_origin,
       y_origin += (dy - 1); 
     }
 
-    second_command += (char)((dy - 1) + 48);
+    //second_command += (char)((dy - 1) + 48);
+    second_command += to_string(dy - 1); 
     commands_queue.push(second_command);
+
   }
 
   string third_command = move_x;
@@ -97,7 +100,8 @@ void MotionControl::get_path(int x_origin, int y_origin,
       x_origin += dx;
     }
 
-    third_command += (char)((dx)+48);
+    //third_command += (char)((dx)+48);
+    third_command += to_string(dx);
 
     third_command += move_y;
     third_command += '0';
@@ -133,7 +137,7 @@ void MotionControl::switch_off_magnet(){
   commands_queue.push(switch_off_instruction);
 }
 
-bool MotionControl::is_a_capture_movement(int x_destiny, int y_destiny){
+bool MotionControl::is_it_a_capture_movement(int x_destiny, int y_destiny){
   if(chess_board[x_destiny][y_destiny] != 0){
     return true;
   }else{
