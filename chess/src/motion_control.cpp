@@ -1,7 +1,43 @@
 #include "../include/motion_control.hpp"
 
+void MotionControl::generate_commands(int x_origin, int y_origin,
+                                      int x_destiny, int y_destiny,
+                                      bool is_a_capture_movement,
+                                      int CNC_x, int CNC_y){  
+  int x_out = 32;
+  int y_out = 32;
+
+  if(is_a_capture_movement == true){
+    // Moving CNC to origin cell
+    switch_off_magnet();
+    get_path(CNC_x, CNC_y, x_destiny, y_destiny);
+
+    // Moving captured piece from destiny cell to out
+    // Need to implement
+
+    // Moving from out cell to origin cell
+    switch_off_magnet();
+    get_path(x_out, y_out, x_origin, y_origin);
+
+    // Moving piece from origin cell to destiny cell
+    switch_on_magnet();
+    get_path(x_origin, y_origin, x_destiny, y_destiny);
+    switch_off_magnet();
+
+  }else if(is_a_capture_movement == false){
+    // Moving CNC to origin cell
+    switch_off_magnet();
+    get_path(CNC_x, CNC_y, x_origin, y_origin);
+  
+    // Moving piece from origin cell to destiny cell
+    switch_on_magnet();
+    get_path(x_origin, y_origin, x_destiny, y_destiny);
+    switch_off_magnet();
+  }
+}
+
 void MotionControl::get_path(int x_origin, int y_origin, 
-    int x_destiny, int y_destiny){
+                             int x_destiny, int y_destiny){
 
   int dx = abs(x_origin - x_destiny);
   int dy = abs(y_origin - y_destiny);
@@ -77,6 +113,7 @@ void MotionControl::get_path(int x_origin, int y_origin,
   }
 
   commands_queue.push(fourth_command);
+
 }
 
 void MotionControl::move_CNC_to_origin_cell(int CNC_x_origin, int CNC_y_origin){
@@ -94,4 +131,12 @@ void MotionControl::switch_on_magnet(){
 void MotionControl::switch_off_magnet(){
   string switch_off_instruction = "G2";
   commands_queue.push(switch_off_instruction);
+}
+
+bool MotionControl::is_a_capture_movement(int x_destiny, int y_destiny){
+  if(chess_board[x_destiny][y_destiny] != 0){
+    return true;
+  }else{
+    return false;
+  }
 }
