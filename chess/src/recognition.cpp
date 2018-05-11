@@ -113,7 +113,11 @@ static string recognize_from_microphone(bool hear_flag, string desired_command)
         // Print the value recognized.
         printf("\n\n\n\n\n%s\n\n\n\n\n", hyp);
         if(desired_command == HEAR_COMMAND){ 
-          if(strcmp(hyp, CHESS_COMMAND.c_str())){ 
+          if(strcmp(hyp, CHESS_COMMAND.c_str())   and
+             strcmp(hyp, BEGIN_COMMAND.c_str())   and
+             strcmp(hyp, RESUME_COMMAND.c_str())  and
+             strcmp(hyp, STOP_COMMAND.c_str())    and
+             strcmp(hyp, END_COMMAND.c_str())){
             command = hyp;
             printf("Stop listening\n");
             hear_flag = false;
@@ -208,8 +212,6 @@ string hear_move(bool hear_flag, string desired_command) {
   desired_command = voice(hear_flag, desired_command);
 
   transform(desired_command.begin(), desired_command.end(), desired_command.begin(), ::toupper);
-
-  cout << "DEU " << desired_command << endl;
 
   return desired_command;
 }

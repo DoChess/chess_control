@@ -112,6 +112,10 @@ static string HEAR_ERROR = "!ERROR!";
 static string HEAR_COMMAND = "!COMMAND!";
 
 static string CHESS_COMMAND = "chess";
+static string BEGIN_COMMAND = "begin game";
+static string END_COMMAND = "end game";
+static string RESUME_COMMAND = "resume game";
+static string STOP_COMMAND = "stop game";
 
 /*
  * Main utterance processing loop:

@@ -127,6 +127,13 @@ int main(){
     is_a_valid_movement = motion_validator.validate_command(coordinates[1],coordinates[0], coordinates[3], coordinates[2], turn);
 
     if(is_a_valid_movement){
+      display_msg = "312" + listened_command;
+
+      shared_memory_content = string(data);
+      if(shared_memory_content == "None"){
+        strncpy(data, display_msg.c_str(), SHM_SIZE);
+      }
+
       x_origin = (motion_validator.number_coordinates[coordinates[1]] * 2) + 1;
       y_origin = (motion_validator.fonetic_alphabet_coordinates[coordinates[0]] * 2) + 1;
       x_destiny = (motion_validator.number_coordinates[coordinates[3]] * 2) + 1;
@@ -136,16 +143,29 @@ int main(){
       motion_control.generate_commands(x_origin, y_origin, x_destiny,
           y_destiny, CNC_position.first, CNC_position.second);
 
+      main_state = 3;
+
+      cout << "STARTING SENDING COMMANDS " << endl;
       while(not commands_queue.empty()){
         string word = commands_queue.front(); commands_queue.pop();
+        cout << word << endl;
+      }
+
+      cout << "ENDING SENDING COMMANDS" << endl;
+
+      display_msg = "14";
+
+      shared_memory_content = string(data);
+      if(shared_memory_content == "None"){
+        strncpy(data, display_msg.c_str(), SHM_SIZE);
       }
 
       // Update CNC position in memory
       CNC_position.first = x_destiny;
       CNC_position.second = y_destiny;
 
-    }else{
       main_state = 1;
+    }else{
       display_msg = "302" + listened_command;
 
       shared_memory_content = string(data);
@@ -153,7 +173,7 @@ int main(){
         strncpy(data, display_msg.c_str(), SHM_SIZE);
       }
 
-      continue;
+      main_state = 1;
     }
   }
 
