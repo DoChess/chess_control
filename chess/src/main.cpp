@@ -63,6 +63,8 @@ vector<string> split_command(string full_message){
 int main(){
   // Investigate why it musts be inside main
   queue<string> commands_queue;
+  string desired_command = HEAR_ERROR;
+  bool hear_flag = false;
 
   initialize_statements();
   MotionValidation motion_validator = MotionValidation(chess_board);
@@ -79,7 +81,7 @@ int main(){
   initialize_statements();
   attach_memory();
 
-  string msg = "";
+  string display_msg = "";
 
   // Added to be used on movimentation
   int x_origin;
@@ -90,100 +92,72 @@ int main(){
   bool is_a_capture_movement;
   bool is_a_valid_movement;
 
+  string shared_memory_content;
+
+  main_state = 1;
+  //start listening, until hear begin 
+  hear_begin(hear_flag, desired_command);
+
   while(1){
-    //start listening 
-    msg = "11";
 
-    if(msg == "11"){
-      string a(data);  
-      if(a == "None"){
-        strncpy(data, "11", SHM_SIZE);
-      }
+    display_msg = "11";
 
-      while(1){
-        msg = "chess";
-
-        if(msg == "chess"){
-          //Comando para o front trocar a cor e indicar que está esperando o resto do comando;
-
-          string b(data);
-          if(b == "None"){
-            strncpy(data, "31", SHM_SIZE);
-          }
-
-          msg = "ECHO TWO ECHO FOUR MOVE";
-
-          fix_on_grammar = true;
-
-          if(fix_on_grammar){
-            main_state = 2;
-            vector<string> coordinates = split_command(msg);
-            is_a_valid_movement = motion_validator.validate_command(coordinates[1],coordinates[0], coordinates[3], coordinates[2], turn);
-
-            if(is_a_valid_movement){
-              x_origin = (motion_validator.number_coordinates[coordinates[1]] * 2) + 1;
-              y_origin = (motion_validator.fonetic_alphabet_coordinates[coordinates[0]] * 2) + 1;
-              x_destiny = (motion_validator.number_coordinates[coordinates[3]] * 2) + 1;
-              y_destiny = (motion_validator.fonetic_alphabet_coordinates[coordinates[2]] * 2) + 1;
-
-              // Calculating commands to send to microcontroller
-              motion_control.generate_commands(x_origin, y_origin, x_destiny,
-                y_destiny, CNC_position.first, CNC_position.second);
-
-              while(not commands_queue.empty()){
-                string word = commands_queue.front(); commands_queue.pop();
-              }
-            
-              // Update CNC position in memory
-              CNC_position.first = x_destiny;
-              CNC_position.second = y_destiny;
-
-            }else{
-              printf("Invalid command error\n");
-              // Mandar sinal para o front
-              continue;
-            }
-
-            a = "3";
-            a += (is_a_valid_movement?'1':'0');
-            a += '2';
-            a += msg;
-
-            strncpy(data, a.c_str(), SHM_SIZE);
-            break;
-
-          }else{
-            a = "322";
-            a += msg;
-            strncpy(data, a.c_str(), SHM_SIZE);
-            printf("Invalid grammar result.\n");
-            continue;
-          }
-        }
-      }
+    shared_memory_content = string(data);
+    if(shared_memory_content == "None"){
+      strncpy(data, "11", SHM_SIZE);
     }
 
+    // Listening untin hear chess
+    hear_chess(hear_flag, desired_command);
+
+    display_msg = "33";
+
+    //Comando para o front trocar a cor e indicar que está esperando o resto do comando;
+    shared_memory_content = string(data);
+    if(shared_memory_content == "None"){
+      strncpy(data, display_msg.c_str(), SHM_SIZE);
+    }
+
+    // TOOD Add loop to hear while == "invalid grammar"
+    string listened_command = hear_move(hear_flag, desired_command);
+
+    main_state = 2;
+
+    vector<string> coordinates = split_command(listened_command);
+    is_a_valid_movement = motion_validator.validate_command(coordinates[1],coordinates[0], coordinates[3], coordinates[2], turn);
+
+    if(is_a_valid_movement){
+      x_origin = (motion_validator.number_coordinates[coordinates[1]] * 2) + 1;
+      y_origin = (motion_validator.fonetic_alphabet_coordinates[coordinates[0]] * 2) + 1;
+      x_destiny = (motion_validator.number_coordinates[coordinates[3]] * 2) + 1;
+      y_destiny = (motion_validator.fonetic_alphabet_coordinates[coordinates[2]] * 2) + 1;
+
+      // Calculating commands to send to microcontroller
+      motion_control.generate_commands(x_origin, y_origin, x_destiny,
+          y_destiny, CNC_position.first, CNC_position.second);
+
+      while(not commands_queue.empty()){
+        string word = commands_queue.front(); commands_queue.pop();
+      }
+
+      // Update CNC position in memory
+      CNC_position.first = x_destiny;
+      CNC_position.second = y_destiny;
+
+    }else{
+      main_state = 1;
+      display_msg = "302" + listened_command;
+
+      shared_memory_content = string(data);
+      if(shared_memory_content == "None"){
+        strncpy(data, display_msg.c_str(), SHM_SIZE);
+      }
+
+      continue;
+    }
   }
 
   detach_memory();
-    
-/*
-  // VOICE RECOGNITION
-  bool hear_flag = false;
-  string desired_command = HEAR_ERROR;
-  string command = "";
 
-  command = hear_begin(hear_flag, desired_command);
-  printf("\n\n\nMAIN: %s\n\n\n", command.c_str());
-
-  command = hear_chess(hear_flag, desired_command);
-  printf("\n\n\nMAIN: %s\n\n\n", command.c_str());
-
-  command = hear_move(hear_flag, desired_command);
-  printf("\n\n\nMAIN: %s\n\n\n", command.c_str());
-
-  command = hear_end(hear_flag, desired_command);
-  printf("\n\n\nMAIN: %s\n\n\n", command.c_str());
-*/
   return 0;
 }

@@ -66,33 +66,34 @@
 #include <sphinxbase/ad.h>
 
 #include "pocketsphinx.h"
+#include "algorithm"
 
 using namespace std;
 
 static const arg_t cont_args_def[] = { 
-        POCKETSPHINX_OPTIONS,
-        /* Argument file. */
-        {"-argfile",
-                ARG_STRING,
-                NULL,
-                "Argument file giving extra arguments."},
-        {"-adcdev",
-                ARG_STRING,
-                NULL,
-                "Name of audio device to use for input."},
-        {"-infile",
-                ARG_STRING,
-                NULL,
-                "Audio file to transcribe."},
-        {"-inmic",
-                ARG_BOOLEAN,
-                "yes",
-                "Transcribe audio from microphone."},
-        {"-time",
-                ARG_BOOLEAN,
-                "no",
-                "Print word times in file transcription."},
-        CMDLN_EMPTY_OPTION
+  POCKETSPHINX_OPTIONS,
+  /* Argument file. */
+  {"-argfile",
+    ARG_STRING,
+    NULL,
+    "Argument file giving extra arguments."},
+  {"-adcdev",
+    ARG_STRING,
+    NULL,
+    "Name of audio device to use for input."},
+  {"-infile",
+    ARG_STRING,
+    NULL,
+    "Audio file to transcribe."},
+  {"-inmic",
+    ARG_BOOLEAN,
+    "yes",
+    "Transcribe audio from microphone."},
+  {"-time",
+    ARG_BOOLEAN,
+    "no",
+    "Print word times in file transcription."},
+  CMDLN_EMPTY_OPTION
 };
 
 
@@ -124,15 +125,15 @@ static string recognize_from_microphone(bool hear_flag, string desired_command);
 
 string voice(bool hear_flag, string desired_command);
 
-string hear_begin(bool hear_flag, string desired_command);
+void hear_begin(bool hear_flag, string desired_command);
 
-string hear_end(bool hear_flag, string desired_command);
+void hear_end(bool hear_flag, string desired_command);
 
-string hear_chess(bool hear_flag, string desired_command);
+void hear_chess(bool hear_flag, string desired_command);
 
 string hear_move(bool hear_flag, string desired_command);
 
-string hear_stop(bool hear_flag, string desired_command);
+void hear_stop(bool hear_flag, string desired_command);
 
-string hear_resume(bool hear_flag, string desired_command);
+void hear_resume(bool hear_flag, string desired_command);
 #endif
