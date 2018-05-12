@@ -1,5 +1,4 @@
 #include "../include/recognition.hpp"
-#include <iostream>
 
 using namespace std;
 
@@ -111,20 +110,20 @@ static string recognize_from_microphone(bool hear_flag, string desired_command)
       hyp = ps_get_hyp(ps, NULL );
       if (hyp != NULL) {
         // Print the value recognized.
-        printf("\n\n\n\n\n%s\n\n\n\n\n", hyp);
+        printf("%s\n", hyp);
         if(desired_command == HEAR_COMMAND){ 
-          if(strcmp(hyp, CHESS_COMMAND.c_str())   and
-             strcmp(hyp, BEGIN_COMMAND.c_str())   and
-             strcmp(hyp, RESUME_COMMAND.c_str())  and
-             strcmp(hyp, STOP_COMMAND.c_str())    and
+          if(strcmp(hyp, CHESS_COMMAND.c_str())   &&
+             strcmp(hyp, BEGIN_COMMAND.c_str())   &&
+             strcmp(hyp, RESUME_COMMAND.c_str())  &&
+             strcmp(hyp, STOP_COMMAND.c_str())    &&
              strcmp(hyp, END_COMMAND.c_str())){
             command = hyp;
-            printf("Stop listening\n");
+            printf("Uderstand command: %s\n", command.c_str());
             hear_flag = false;
           }
         } else if(!strcmp(hyp, desired_command.c_str())){ 
           command = hyp;
-          printf("Stop listening\n");
+          printf("Uderstand command: %s\n", command.c_str());
           hear_flag = false;
         }
         fflush(stdout);
@@ -194,6 +193,7 @@ void hear_begin(bool hear_flag, string desired_command) {
   voice(hear_flag, desired_command);
 }
 
+// Removed from grammar/chess_grammar.jsgf, need to add | end game | if needed.
 void hear_end(bool hear_flag, string desired_command) {
   hear_flag = true;
   desired_command = "end game";

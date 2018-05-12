@@ -14,7 +14,7 @@ int mode;
 
 void attach_memory(){
   /* make the key: */
-  if ((key = ftok("/home/miranda/Documents/nono_semestre/PI2/software_de_controle/hello.txt", 'R')) == -1) /*Here the file must exist */ 
+  if ((key = ftok("/tmp/chess_shared_memmory.txt", 'R')) == -1) /*Here the file must exist */ 
   {
     perror("ftok");
     exit(1);

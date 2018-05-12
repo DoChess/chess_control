@@ -22,6 +22,7 @@ CHESS := $(wildcard src/*.cpp)
 # Compile project. 
 all: create_folders $(CHESS:src/%.c=obj/%.o)
 	$(COMPILER) -o bin/chess $(CHESS) $(FLAGS)
+	touch /tmp/chess_shared_memmory.txt
 
 create_folders:
 	@mkdir -p $(OBJ) $(BIN)
