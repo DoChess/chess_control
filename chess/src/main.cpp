@@ -96,7 +96,7 @@ int main(){
 
   main_state = 1;
   //start listening, until hear begin 
-	cout << "Everything ok. Waiting for \"begin game\"!" << endl;
+	cout << "Everything ok!" << endl;
   hear_begin(hear_flag, desired_command);
 
   while(1){

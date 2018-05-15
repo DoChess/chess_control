@@ -100,6 +100,7 @@ static string recognize_from_microphone(bool hear_flag, string desired_command)
     if (in_speech && !utt_started) {
       utt_started = TRUE;
       E_INFO("Listening...\n");
+      printf("Listening...\n");
     }
 
     // If no one is talking and is hearing. So stop it, and print the 
@@ -110,7 +111,7 @@ static string recognize_from_microphone(bool hear_flag, string desired_command)
       hyp = ps_get_hyp(ps, NULL );
       if (hyp != NULL) {
         // Print the value recognized.
-        printf("%s\n", hyp);
+        //printf("%s\n", hyp);
         if(desired_command == HEAR_COMMAND){ 
           if(strcmp(hyp, CHESS_COMMAND.c_str())   &&
              strcmp(hyp, BEGIN_COMMAND.c_str())   &&
@@ -133,6 +134,7 @@ static string recognize_from_microphone(bool hear_flag, string desired_command)
         E_FATAL("Failed to start utterance\n");
       utt_started = FALSE;
       E_INFO("Ready....\n");
+      printf("Ready....\n");
     }
     sleep_msec(100);
   }
@@ -188,25 +190,29 @@ string voice(bool hear_flag, string desired_command)
 }
 
 void hear_begin(bool hear_flag, string desired_command) {
+	printf("Waiting for %s\n", BEGIN_COMMAND.c_str());
   hear_flag = true;
-  desired_command = "begin game";
+  desired_command = BEGIN_COMMAND;
   voice(hear_flag, desired_command);
 }
 
 // Removed from grammar/chess_grammar.jsgf, need to add | end game | if needed.
 void hear_end(bool hear_flag, string desired_command) {
+	printf("Waiting for %s\n", END_COMMAND.c_str());
   hear_flag = true;
-  desired_command = "end game";
+  desired_command = END_COMMAND;
   voice(hear_flag, desired_command);
 }
 
 void hear_chess(bool hear_flag, string desired_command) {
+	printf("Waiting for %s\n", CHESS_COMMAND.c_str());
   hear_flag = true;
   desired_command = CHESS_COMMAND;
   desired_command = voice(hear_flag, desired_command);
 }
 
 string hear_move(bool hear_flag, string desired_command) {
+	printf("Waiting for %s\n", HEAR_COMMAND.c_str());
   hear_flag = true;
   desired_command = HEAR_COMMAND;
   desired_command = voice(hear_flag, desired_command);
@@ -217,13 +223,15 @@ string hear_move(bool hear_flag, string desired_command) {
 }
 
 void hear_stop(bool hear_flag, string desired_command){
+	printf("Waiting for %s\n", STOP_COMMAND.c_str());
   hear_flag = true;
-  desired_command = "stop game";
+  desired_command = STOP_COMMAND;
   voice(hear_flag, desired_command);
 }
 
 void hear_resume(bool hear_flag, string desired_command){
+	printf("Waiting for %s\n", RESUME_COMMAND.c_str());
   hear_flag = true;
-  desired_command = "resume game";
+  desired_command = RESUME_COMMAND;
   voice(hear_flag, desired_command);
 }
