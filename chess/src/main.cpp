@@ -168,6 +168,7 @@ int main(){
 
       main_state = 3;
 
+      printf("CHESS STATE BEFORE MOVING\n");
       print_actual_chess_board(motion_validator);
       printf("\n\n");
 
@@ -176,7 +177,7 @@ int main(){
         string word = commands_queue.front(); commands_queue.pop();
         cout << word << endl;
       }
-      printf("\nALL COMMANDS SENT TO MICROCONTROLLER.\n\n");
+      printf("\n\nALL COMMANDS SENT TO MICROCONTROLLER.\n\n");
 
       chess_board[x_destiny][y_destiny] = chess_board[x_origin][y_origin];
       chess_board[x_origin][y_origin] = 0;
@@ -185,6 +186,7 @@ int main(){
       CNC_position.first = x_destiny_point;
       CNC_position.second = y_destiny_point;
 
+      printf("CHESS STATE AFTER MOVING\n");
       print_actual_chess_board(motion_validator);
 
       display_msg = "14";

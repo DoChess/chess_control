@@ -3,18 +3,20 @@
 void MotionControl::generate_commands(int x_origin, int y_origin,
                                       int x_destiny, int y_destiny,
                                       int CNC_x, int CNC_y){  
-  int x_out = 32;
-  int y_out = 32;
+  int x_out = 17;
+  int y_out = 17;
 
   bool is_a_capture = is_it_a_capture_movement(x_destiny, y_destiny);
 
-  if(is_a_capture == true){
+  if(is_a_capture){
     // Moving CNC to origin cell
     switch_off_magnet();
     get_path(CNC_x, CNC_y, x_destiny, y_destiny);
 
     // Moving captured piece from destiny cell to out
     // Need to implement
+    switch_off_magnet();
+    get_path(x_destiny, y_destiny, x_out, y_out);
 
     // Moving from out cell to origin cell
     switch_off_magnet();
@@ -25,7 +27,7 @@ void MotionControl::generate_commands(int x_origin, int y_origin,
     get_path(x_origin, y_origin, x_destiny, y_destiny);
     switch_off_magnet();
 
-  }else if(is_a_capture == false){
+  }else{
     // Moving CNC to origin cell
     switch_off_magnet();
     get_path(CNC_x, CNC_y, x_origin, y_origin);
@@ -147,9 +149,5 @@ void MotionControl::switch_off_magnet(){
 }
 
 bool MotionControl::is_it_a_capture_movement(int x_destiny, int y_destiny){
-  if(chess_board[x_destiny][y_destiny] != 0){
-    return true;
-  }else{
-    return false;
-  }
+  return chess_board[(x_destiny - 1)/2][(y_destiny - 1)/2] != 0;
 }
