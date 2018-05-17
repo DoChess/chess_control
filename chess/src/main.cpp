@@ -60,6 +60,20 @@ vector<string> split_command(string full_message){
   return coordinates;
 }
 
+void print_actual_chess_board(MotionValidation motion_validator){
+  for(int i = 0;i < 8;++i){
+    for(int j = 0;j < 8;++j){
+      string piece = motion_validator.piece_types[chess_board[i][j]].c_str();
+      if(piece == "") printf("%s","     EMPTY");
+      else{
+        for(int i = 0;i < 10 - piece.size();++i) printf(" ");
+        printf("%s", piece.c_str());
+      }
+    }
+    printf("\n");
+  }
+}
+
 int main(){
   // Investigate why it musts be inside main
   queue<string> commands_queue;
@@ -76,7 +90,7 @@ int main(){
   char main_state;
   queue<string> front_messages;
   bool fix_on_grammar;
-  int turn = 1;
+  int turn = 0;
 
   initialize_statements();
   attach_memory();
@@ -84,6 +98,10 @@ int main(){
   string display_msg = "";
 
   // Added to be used on movimentation
+  int x_origin_point;
+  int y_origin_point;
+  int x_destiny_point;
+  int y_destiny_point;
   int x_origin;
   int y_origin; 
   int x_destiny;
@@ -96,7 +114,6 @@ int main(){
 
   main_state = 1;
   //start listening, until hear begin 
-	cout << "Everything ok!" << endl;
   hear_begin(hear_flag, desired_command);
 
   while(1){
@@ -135,24 +152,40 @@ int main(){
         strncpy(data, display_msg.c_str(), SHM_SIZE);
       }
 
-      x_origin = (motion_validator.number_coordinates[coordinates[1]] * 2) + 1;
-      y_origin = (motion_validator.fonetic_alphabet_coordinates[coordinates[0]] * 2) + 1;
-      x_destiny = (motion_validator.number_coordinates[coordinates[3]] * 2) + 1;
-      y_destiny = (motion_validator.fonetic_alphabet_coordinates[coordinates[2]] * 2) + 1;
+      x_origin_point = (motion_validator.number_coordinates[coordinates[1]] * 2) + 1;
+      y_origin_point = (motion_validator.fonetic_alphabet_coordinates[coordinates[0]] * 2) + 1;
+      x_destiny_point = (motion_validator.number_coordinates[coordinates[3]] * 2) + 1;
+      y_destiny_point = (motion_validator.fonetic_alphabet_coordinates[coordinates[2]] * 2) + 1;
+
+      x_origin = motion_validator.number_coordinates[coordinates[1]];
+      y_origin = motion_validator.fonetic_alphabet_coordinates[coordinates[0]];
+      x_destiny = motion_validator.number_coordinates[coordinates[3]];
+      y_destiny = motion_validator.fonetic_alphabet_coordinates[coordinates[2]];
 
       // Calculating commands to send to microcontroller
-      motion_control.generate_commands(x_origin, y_origin, x_destiny,
-          y_destiny, CNC_position.first, CNC_position.second);
+      motion_control.generate_commands(x_origin_point, y_origin_point, x_destiny_point,
+          y_destiny_point, CNC_position.first, CNC_position.second);
 
       main_state = 3;
 
-      cout << "STARTING SENDING COMMANDS " << endl;
+      print_actual_chess_board(motion_validator);
+      printf("\n\n");
+
+      printf("SENDING COMMANDS TO MICROCONTROLLER:\n\n");
       while(not commands_queue.empty()){
         string word = commands_queue.front(); commands_queue.pop();
         cout << word << endl;
       }
+      printf("\nALL COMMANDS SENT TO MICROCONTROLLER.\n\n");
 
-      cout << "ENDING SENDING COMMANDS" << endl;
+      chess_board[x_destiny][y_destiny] = chess_board[x_origin][y_origin];
+      chess_board[x_origin][y_origin] = 0;
+
+      // Update CNC position in memory
+      CNC_position.first = x_destiny_point;
+      CNC_position.second = y_destiny_point;
+
+      print_actual_chess_board(motion_validator);
 
       display_msg = "14";
 
@@ -161,12 +194,12 @@ int main(){
         strncpy(data, display_msg.c_str(), SHM_SIZE);
       }
 
-      // Update CNC position in memory
-      CNC_position.first = x_destiny;
-      CNC_position.second = y_destiny;
-
+      // Change player
+      turn = 1 - turn;
       main_state = 1;
     }else{
+      printf("THE COMMAND IS INVALID! PLEASE GIVE ANOTHER COMMAND!\n");
+
       display_msg = "302" + listened_command;
 
       shared_memory_content = string(data);
