@@ -111,7 +111,7 @@ int main(){
     // Listening untin hear chess
     hear_chess(hear_flag, desired_command);
 
-    display_msg = "33";
+    display_msg = "332Listening";
 
     //Comando para o front trocar a cor e indicar que está esperando o resto do comando;
     shared_memory_content = string(data);

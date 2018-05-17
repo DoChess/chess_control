@@ -15,10 +15,12 @@ class MotionControl {
                   queue<string> &p_commands_queue
                  ):chess_board(p_chess_board),
                    points_chess_board(p_points_chess_board),
-                   commands_queue(p_commands_queue){};
+                   commands_queue(p_commands_queue),
+                   magnet_is_on(true){};
 
     ~MotionControl(){};
     
+    bool magnet_is_on;
     queue<string> &commands_queue;
     void get_path(int, int, int, int);
     void switch_on_magnet();
