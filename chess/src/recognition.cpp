@@ -119,12 +119,12 @@ static string recognize_from_microphone(bool hear_flag, string desired_command)
              strcmp(hyp, STOP_COMMAND.c_str())    &&
              strcmp(hyp, END_COMMAND.c_str())){
             command = hyp;
-            printf("Uderstand command: %s\n", command.c_str());
+            printf("Understand command: %s\n", command.c_str());
             hear_flag = false;
           }
         } else if(!strcmp(hyp, desired_command.c_str())){ 
           command = hyp;
-          printf("Uderstand command: %s\n", command.c_str());
+          printf("Understand command: %s\n", command.c_str());
           hear_flag = false;
         }
         fflush(stdout);
