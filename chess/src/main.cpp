@@ -116,14 +116,14 @@ int main(){
   //start listening, until hear begin 
   hear_begin(hear_flag, desired_command);
 
+  display_msg = "11";
+
+  shared_memory_content = string(data);
+  if(shared_memory_content == "None"){
+    strncpy(data, "11", SHM_SIZE);
+  }
+
   while(1){
-
-    display_msg = "11";
-
-    shared_memory_content = string(data);
-    if(shared_memory_content == "None"){
-      strncpy(data, "11", SHM_SIZE);
-    }
 
     // Listening untin hear chess
     hear_chess(hear_flag, desired_command);
@@ -191,9 +191,12 @@ int main(){
 
       display_msg = "14";
 
-      shared_memory_content = string(data);
-      if(shared_memory_content == "None"){
-        strncpy(data, display_msg.c_str(), SHM_SIZE);
+      while(1){
+        shared_memory_content = string(data);
+        if(shared_memory_content == "None"){
+          strncpy(data, display_msg.c_str(), SHM_SIZE);
+          break;
+        }
       }
 
       // Change player

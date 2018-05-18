@@ -7,3 +7,4 @@ grammar/chess_grammar.jsgf
 -hmm
 model/cmusphinx-en-us-8khz-5.2
 -logfn recognition.log
+-bestpath yes no
