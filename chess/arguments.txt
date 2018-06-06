@@ -5,6 +5,6 @@ model/cmudict-en-us.dict
 -jsgf
 grammar/chess_grammar.jsgf
 -hmm
-model/cmusphinx-en-us-8khz-5.2
+model/cmusphinx-en-us-ptm-8khz-5.2
 -logfn recognition.log
 -bestpath yes no

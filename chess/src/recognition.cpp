@@ -157,6 +157,7 @@ string voice(bool hear_flag, string desired_command)
     argv[1] = argv1;
     argv[2] = argv2;
 
+
     config = cmd_ln_parse_r(NULL, cont_args_def, argc, argv, TRUE);
 
     /* Handle argument file as -argfile. */
