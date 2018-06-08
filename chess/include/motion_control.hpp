@@ -7,6 +7,7 @@
 #include <cstdlib>
 
 using namespace std;
+using par = pair<int,int>;
 
 class MotionControl {
   public:
@@ -32,6 +33,10 @@ class MotionControl {
     bool is_it_a_capture_movement(int, int);
     int (&chess_board)[8][8];
     int (&points_chess_board)[17][17];
+    par black_cemetery;
+    par white_cemetery;
+    int sent_instructions_counter = 0;
+    void send_magnet_to_initial_position();
 };
 
 #endif

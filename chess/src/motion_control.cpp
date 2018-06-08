@@ -45,27 +45,28 @@ void MotionControl::get_path(int x_origin, int y_origin,
   int dx = abs(x_origin - x_destiny);
   int dy = abs(y_origin - y_destiny);
 
-  string move_x = "G0 X ";
+  string velocity_signal;
+  if(magnet_is_on == true){
+    velocity_signal = "G0";
+  }else{
+    velocity_signal = "G1";
+  }
+
+  string move_x = velocity_signal + " X ";
   string move_y = " Y ";
 
   int old_x_origin = x_origin;
   int old_y_origin = y_origin;
 
-  string velocity = " F ";
-  if(magnet_is_on == true){
-    velocity += "0";
-  }else{
-    velocity += "1";
-  }
 
   string first_command;
 
   if(x_destiny <= x_origin){
-    first_command = "G0 X -1 Y 0";
+    first_command = velocity_signal + " X -1 Y 0";
     x_origin--;
     commands_queue.push(first_command + velocity);
   }else{
-    first_command = "GO X 1 Y 0";
+    first_command = velocity_signal + " X 1 Y 0";
     x_origin++;
     commands_queue.push(first_command + velocity);
   }
@@ -73,7 +74,7 @@ void MotionControl::get_path(int x_origin, int y_origin,
   string second_command = move_x;
 
   if(old_y_origin == y_destiny){
-    second_command = "G0 X 0 Y 1";
+    second_command = velocity_signal + " X 0 Y 1";
     y_origin++; 
     commands_queue.push(second_command + velocity);
   }else{
@@ -98,7 +99,7 @@ void MotionControl::get_path(int x_origin, int y_origin,
   dy = abs(y_origin - y_destiny);
 
   if(old_x_origin == x_destiny){
-    third_command = "G0 X 1 Y 0";
+    third_command = velocity_signal + " X 1 Y 0";
     x_origin++;
     commands_queue.push(third_command + velocity);
   }else{
@@ -127,6 +128,12 @@ void MotionControl::get_path(int x_origin, int y_origin,
 
   commands_queue.push(fourth_command + velocity);
 
+  sent_instructions_counter++;
+
+  if(sent_instructions_counter == 4){
+    send_magnet_to_initial_position();
+    sent_instructions_counter = 0;
+  }
 }
 
 void MotionControl::move_CNC_to_origin_cell(int CNC_x_origin, int CNC_y_origin){
@@ -137,15 +144,21 @@ void MotionControl::move_CNC_to_origin_cell(int CNC_x_origin, int CNC_y_origin){
 }
 
 void MotionControl::switch_on_magnet(){
-  string switch_on_instruction = "G1";
+  string switch_on_instruction = "G2";
   commands_queue.push(switch_on_instruction);
   magnet_is_on = true;
 }
 
 void MotionControl::switch_off_magnet(){
-  string switch_off_instruction = "G2";
+  string switch_off_instruction = "G3";
   commands_queue.push(switch_off_instruction);
   magnet_is_on = false;
+}
+
+void MotionControl::send_magnet_to_initial_position(){
+  switch_off_magnet();
+  string move_to_init_instruction = "G4";
+  commands_queue.push(move_to_init_instruction);
 }
 
 bool MotionControl::is_it_a_capture_movement(int x_destiny, int y_destiny){
