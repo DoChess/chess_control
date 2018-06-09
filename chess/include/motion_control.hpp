@@ -27,16 +27,16 @@ class MotionControl {
     void switch_on_magnet();
     void switch_off_magnet();
     void move_CNC_to_origin_cell(int, int); 
-    void generate_commands(int, int, int, int, int, int);
+    void generate_commands(int, int, int, int, int, int, int);
+    par get_white_free_cemetery();
+    par get_black_free_cemetery();
     
   private:
     bool is_it_a_capture_movement(int, int);
     int (&chess_board)[8][8];
     int (&points_chess_board)[17][17];
-    par black_cemetery;
-    par white_cemetery;
-    int sent_instructions_counter = 0;
-    void send_magnet_to_initial_position();
+    par white_cemetery = make_pair(1, -3);
+    par black_cemetery = make_pair(1, 19);
 };
 
 #endif

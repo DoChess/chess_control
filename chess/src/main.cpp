@@ -91,6 +91,7 @@ int main(){
   queue<string> front_messages;
   bool fix_on_grammar;
   int turn = 0;
+  int sent_commands_counter = 0;
 
   initialize_statements();
   attach_memory();
@@ -164,7 +165,7 @@ int main(){
 
       // Calculating commands to send to microcontroller
       motion_control.generate_commands(x_origin_point, y_origin_point, x_destiny_point,
-          y_destiny_point, CNC_position.first, CNC_position.second);
+          y_destiny_point, CNC_position.first, CNC_position.second, turn);
 
       main_state = 3;
 
@@ -185,6 +186,18 @@ int main(){
       // Update CNC position in memory
       CNC_position.first = x_destiny_point;
       CNC_position.second = y_destiny_point;
+
+      sent_commands_counter++;
+      // Sending CNC to initial position
+      if(sent_commands_counter == 4){
+        commands_queue.push("G4");
+        CNC_position.first = 0;
+        CNC_position.second = 0;
+        sent_commands_counter = 0;
+
+        // TODO add method to send to CNC here
+        commands_queue.pop();
+      }
 
       printf("CHESS STATE AFTER MOVING\n");
       print_actual_chess_board(motion_validator);
