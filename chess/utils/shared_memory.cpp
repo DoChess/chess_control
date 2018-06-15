@@ -10,7 +10,7 @@
 key_t key;
 int shmid;
 char *data;
-int mode;
+int mem_mode;
 
 void attach_memory(){
   /* make the key: */

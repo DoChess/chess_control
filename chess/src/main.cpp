@@ -5,6 +5,7 @@
 #include "../include/motion_validation.hpp"
 #include "../utils/shared_memory.cpp"
 #include "../include/motion_control.hpp"
+#include "../include/communication.hpp"
 
 // Voice recognition include.
 #include "../include/recognition.hpp"
@@ -176,7 +177,7 @@ int main(){
       printf("SENDING COMMANDS TO MICROCONTROLLER:\n\n");
       while(not commands_queue.empty()){
         string word = commands_queue.front(); commands_queue.pop();
-        cout << word << endl;
+        send_command(word);
       }
       printf("\n\nALL COMMANDS SENT TO MICROCONTROLLER.\n\n");
 
