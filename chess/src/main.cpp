@@ -96,6 +96,7 @@ int main(){
 
   initialize_statements();
   attach_memory();
+  open_comport();
 
   string display_msg = "";
 
@@ -177,7 +178,8 @@ int main(){
       printf("SENDING COMMANDS TO MICROCONTROLLER:\n\n");
       while(not commands_queue.empty()){
         string word = commands_queue.front(); commands_queue.pop();
-        send_command(word);
+        cout << "Mandando " << word << endl;
+        //send_command(word);
       }
       printf("\n\nALL COMMANDS SENT TO MICROCONTROLLER.\n\n");
 
