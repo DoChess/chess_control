@@ -108,7 +108,7 @@ int main(){
 
   initialize_statements();
   attach_memory();
-  open_comport();
+  //open_comport();
 
   string display_msg = "";
 
@@ -128,6 +128,12 @@ int main(){
   string shared_memory_content;
 
   main_state = 1;
+
+  // TESTING CONFIRMATION!!!
+  hear_repeat(hear_flag, desired_command);
+  hear_move(hear_flag, desired_command);
+  hear_command(hear_flag, desired_command);
+
   //start listening, until hear begin 
   hear_begin(hear_flag, desired_command);
 
@@ -141,7 +147,7 @@ int main(){
 
   while(1){
 
-    // Listening untin hear chess
+    // Listening until hear chess
     hear_chess(hear_flag, desired_command);
 
     display_msg = "332Listening";
@@ -153,8 +159,8 @@ int main(){
     // }
       if(!read_and_write_in_shared_memory(display_msg)){break;}
 
-    // TOOD Add loop to hear while == "invalid grammar"
-    string listened_command = hear_move(hear_flag, desired_command);
+    // TODO Add loop to hear while == "invalid grammar"
+    string listened_command = hear_command(hear_flag, desired_command);
 
     main_state = 2;
 

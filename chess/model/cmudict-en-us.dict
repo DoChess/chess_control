@@ -1,5 +1,7 @@
 chess CH EH S
 move M UW V
+repeat R IH P IY T
+repeat(2) R IY P IY T
 begin B IH G IH N
 end EH N D
 stop S T AA P
