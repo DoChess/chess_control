@@ -111,12 +111,12 @@ static string recognize_from_microphone(bool hear_flag, string desired_command)
       hyp = ps_get_hyp(ps, NULL );
       if (hyp != NULL) {
         // Print the value recognized.
-        //printf("%s\n", hyp);
+        printf("%s\n", hyp);
         if(desired_command == HEAR_COMMAND){ 
           if(strcmp(hyp, CHESS_COMMAND.c_str())   &&
              strcmp(hyp, BEGIN_COMMAND.c_str())   &&
              strcmp(hyp, RESUME_COMMAND.c_str())  &&
-             strcmp(hyp, REPEAT_COMMAND.c_str())    &&
+             strcmp(hyp, REPEAT_COMMAND.c_str())  &&
              strcmp(hyp, MOVE_COMMAND.c_str())    &&
              strcmp(hyp, STOP_COMMAND.c_str())    &&
              strcmp(hyp, END_COMMAND.c_str())){
@@ -124,6 +124,13 @@ static string recognize_from_microphone(bool hear_flag, string desired_command)
             printf("Understand command: %s\n", command.c_str());
             hear_flag = false;
           }
+        } else if(desired_command == FEEDBACK_COMMAND){ 
+           printf("FEEDBACK\n");
+           if(!strcmp(hyp, MOVE_COMMAND.c_str()) || !strcmp(hyp, REPEAT_COMMAND.c_str())){ 
+             command = hyp;
+             printf("Understand command: %s\n", command.c_str());
+             hear_flag = false;
+           }
         } else if(!strcmp(hyp, desired_command.c_str())){ 
           command = hyp;
           printf("Understand command: %s\n", command.c_str());
@@ -214,17 +221,10 @@ void hear_chess(bool hear_flag, string desired_command) {
   desired_command = voice(hear_flag, desired_command);
 }
 
-void hear_repeat(bool hear_flag, string desired_command) {
-	printf("Waiting for %s\n", REPEAT_COMMAND.c_str());
+void hear_feedback(bool hear_flag, string desired_command) {
+	printf("Waiting for %s\n", FEEDBACK_COMMAND.c_str());
   hear_flag = true;
-  desired_command = REPEAT_COMMAND;
-  desired_command = voice(hear_flag, desired_command);
-}
-
-void hear_move(bool hear_flag, string desired_command) {
-	printf("Waiting for %s\n", MOVE_COMMAND.c_str());
-  hear_flag = true;
-  desired_command = MOVE_COMMAND;
+  desired_command = FEEDBACK_COMMAND;
   desired_command = voice(hear_flag, desired_command);
 }
 

@@ -107,17 +107,21 @@ static int check_wav_header(char *header, int expected_sr);
 
 static void sleep_msec(int32 ms);
 
+// Error
 static string HEAR_ERROR = "ERROR";
 
+// Movement
 static string HEAR_COMMAND = "COMMAND";
 
-static string CHESS_COMMAND = "chess";
-static string REPEAT_COMMAND = "repeat";
-static string MOVE_COMMAND = "move";
-static string BEGIN_COMMAND = "begin game";
-static string END_COMMAND = "end game";
-static string RESUME_COMMAND = "resume game";
-static string STOP_COMMAND = "stop game";
+// Commands
+static string CHESS_COMMAND    = "chess";
+static string FEEDBACK_COMMAND = "feedback";
+static string REPEAT_COMMAND   = "repeat";
+static string MOVE_COMMAND     = "move";
+static string BEGIN_COMMAND    = "begin game";
+static string END_COMMAND      = "end game";
+static string RESUME_COMMAND   = "resume game";
+static string STOP_COMMAND     = "stop game";
 
 /*
  * Main utterance processing loop:
@@ -137,9 +141,7 @@ void hear_end(bool hear_flag, string desired_command);
 
 void hear_chess(bool hear_flag, string desired_command);
 
-void hear_repeat(bool hear_flag, string desired_command);
-
-void hear_move(bool hear_flag, string desired_command);
+void hear_feedback(bool hear_flag, string desired_command);
 
 string hear_command(bool hear_flag, string desired_command);
 

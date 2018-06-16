@@ -130,9 +130,7 @@ int main(){
   main_state = 1;
 
   // TESTING CONFIRMATION!!!
-  hear_repeat(hear_flag, desired_command);
-  hear_move(hear_flag, desired_command);
-  hear_command(hear_flag, desired_command);
+  hear_feedback(hear_flag, desired_command);
 
   //start listening, until hear begin 
   hear_begin(hear_flag, desired_command);
