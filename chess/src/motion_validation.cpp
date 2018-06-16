@@ -137,7 +137,7 @@ void MotionValidation::its_possible_to_defend_king(int x_origin,
   chess_board[x_destiny][y_destiny] = 0;
 }
 
-bool MotionValidation::verify_if_king_is_in_check(int x_origin,
+bool MotionValidation::verify_if_king_continues_in_check(int x_origin,
     int y_origin,
     int x_destiny,
     int y_destiny){
@@ -167,7 +167,7 @@ bool MotionValidation::validate_command(string x_origin, string y_origin,
   if(is_there_a_piece_at_origin(x, y) and
     the_piece_is_mine(x, y, turn) and
     the_piece_can_do_it(x, y, z, k, turn) and
-    verify_if_king_is_in_check(x, y, z, k)){
+    verify_if_king_continues_in_check(x, y, z, k)){
     return true;
   }else{
     return false;
