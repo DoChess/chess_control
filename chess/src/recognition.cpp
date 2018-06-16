@@ -116,6 +116,8 @@ static string recognize_from_microphone(bool hear_flag, string desired_command)
           if(strcmp(hyp, CHESS_COMMAND.c_str())   &&
              strcmp(hyp, BEGIN_COMMAND.c_str())   &&
              strcmp(hyp, RESUME_COMMAND.c_str())  &&
+             strcmp(hyp, REPEAT_COMMAND.c_str())    &&
+             strcmp(hyp, MOVE_COMMAND.c_str())    &&
              strcmp(hyp, STOP_COMMAND.c_str())    &&
              strcmp(hyp, END_COMMAND.c_str())){
             command = hyp;
@@ -212,7 +214,21 @@ void hear_chess(bool hear_flag, string desired_command) {
   desired_command = voice(hear_flag, desired_command);
 }
 
-string hear_move(bool hear_flag, string desired_command) {
+void hear_repeat(bool hear_flag, string desired_command) {
+	printf("Waiting for %s\n", REPEAT_COMMAND.c_str());
+  hear_flag = true;
+  desired_command = REPEAT_COMMAND;
+  desired_command = voice(hear_flag, desired_command);
+}
+
+void hear_move(bool hear_flag, string desired_command) {
+	printf("Waiting for %s\n", MOVE_COMMAND.c_str());
+  hear_flag = true;
+  desired_command = MOVE_COMMAND;
+  desired_command = voice(hear_flag, desired_command);
+}
+
+string hear_command(bool hear_flag, string desired_command) {
 	printf("Waiting for %s\n", HEAR_COMMAND.c_str());
   hear_flag = true;
   desired_command = HEAR_COMMAND;
