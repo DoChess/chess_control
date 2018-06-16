@@ -75,6 +75,18 @@ void print_actual_chess_board(MotionValidation motion_validator){
   }
 }
 
+bool read_and_write_in_shared_memory(string write_data){
+  string shared_memory_content = string(data);
+  // cout << "Read and write data!!! Pegando a informação =" << shared_memory_content << " " << write_data << endl;
+  cout << "Este é o valor  do shared_memory_content = " << shared_memory_content << endl;
+  if(shared_memory_content == "None"){
+    strncpy(data, write_data.c_str(), SHM_SIZE);
+  } else if (shared_memory_content == "15"){
+    return false;
+  }
+  return true;
+}
+
 int main(){
   // Investigate why it musts be inside main
   queue<string> commands_queue;
@@ -121,10 +133,11 @@ int main(){
 
   display_msg = "11";
 
-  shared_memory_content = string(data);
-  if(shared_memory_content == "None"){
-    strncpy(data, "11", SHM_SIZE);
-  }
+  // shared_memory_content = string(data);
+  // if(shared_memory_content == "None"){
+  //   strncpy(data, "11", SHM_SIZE);
+  // }
+  read_and_write_in_shared_memory("11");
 
   while(1){
 
@@ -134,10 +147,11 @@ int main(){
     display_msg = "332Listening";
 
     //Comando para o front trocar a cor e indicar que está esperando o resto do comando;
-    shared_memory_content = string(data);
-    if(shared_memory_content == "None"){
-      strncpy(data, display_msg.c_str(), SHM_SIZE);
-    }
+    // shared_memory_content = string(data);
+    // if(shared_memory_content == "None"){
+    //   strncpy(data, display_msg.c_str(), SHM_SIZE);
+    // }
+      if(!read_and_write_in_shared_memory(display_msg)){break;}
 
     // TOOD Add loop to hear while == "invalid grammar"
     string listened_command = hear_move(hear_flag, desired_command);
@@ -150,10 +164,11 @@ int main(){
     if(is_a_valid_movement){
       display_msg = "312" + listened_command;
 
-      shared_memory_content = string(data);
-      if(shared_memory_content == "None"){
-        strncpy(data, display_msg.c_str(), SHM_SIZE);
-      }
+      // shared_memory_content = string(data);
+      // if(shared_memory_content == "None"){
+      //   strncpy(data, display_msg.c_str(), SHM_SIZE);
+      // }
+      if(!read_and_write_in_shared_memory(display_msg)){break;}
 
       x_origin_point = (motion_validator.number_coordinates[coordinates[1]] * 2) + 1;
       y_origin_point = (motion_validator.fonetic_alphabet_coordinates[coordinates[0]] * 2) + 1;
@@ -213,20 +228,22 @@ int main(){
           strncpy(data, display_msg.c_str(), SHM_SIZE);
           break;
         }
+
       }
 
       // Change player
       turn = 1 - turn;
       main_state = 1;
-    }else{
+    } else {
       printf("THE COMMAND IS INVALID! PLEASE GIVE ANOTHER COMMAND!\n");
 
       display_msg = "302" + listened_command;
 
-      shared_memory_content = string(data);
-      if(shared_memory_content == "None"){
-        strncpy(data, display_msg.c_str(), SHM_SIZE);
-      }
+      // shared_memory_content = string(data);
+      // if(shared_memory_content == "None"){
+      //   strncpy(data, display_msg.c_str(), SHM_SIZE);
+      // }
+      if(!read_and_write_in_shared_memory(display_msg)){break;}
 
       main_state = 1;
     }
