@@ -55,8 +55,8 @@ void MotionControl::get_path(int x_origin, int y_origin,
     velocity_signal = "G1";
   }
 
-  string move_x = velocity_signal + " X ";
-  string move_y = " Y ";
+  string move_x = velocity_signal + " X";
+  string move_y = " Y";
 
   int old_x_origin = x_origin;
   int old_y_origin = y_origin;
@@ -65,11 +65,11 @@ void MotionControl::get_path(int x_origin, int y_origin,
   string first_command;
 
   if(x_destiny <= x_origin){
-    first_command = velocity_signal + " X -1 Y 0";
+    first_command = velocity_signal + " X-1 Y0";
     x_origin--;
     commands_queue.push(first_command);
   }else{
-    first_command = velocity_signal + " X 1 Y 0";
+    first_command = velocity_signal + " X1 Y0";
     x_origin++;
     commands_queue.push(first_command);
   }
@@ -77,7 +77,7 @@ void MotionControl::get_path(int x_origin, int y_origin,
   string second_command = move_x;
 
   if(old_y_origin == y_destiny){
-    second_command = velocity_signal + " X 0 Y 1";
+    second_command = velocity_signal + " X0 Y1";
     y_origin++; 
     commands_queue.push(second_command);
   }else{
@@ -102,7 +102,7 @@ void MotionControl::get_path(int x_origin, int y_origin,
   dy = abs(y_origin - y_destiny);
 
   if(old_x_origin == x_destiny){
-    third_command = velocity_signal + " X 1 Y 0";
+    third_command = velocity_signal + " X1 Y0";
     x_origin++;
     commands_queue.push(third_command);
   }else{
@@ -124,9 +124,9 @@ void MotionControl::get_path(int x_origin, int y_origin,
   string fourth_command = move_x;
 
   if(y_origin == y_destiny + 1){
-    fourth_command += "0 Y -1";
+    fourth_command += "0 Y-1";
   }else if(y_origin == y_destiny - 1){
-    fourth_command += "0 Y 1";
+    fourth_command += "0 Y1";
   }
 
   commands_queue.push(fourth_command);
