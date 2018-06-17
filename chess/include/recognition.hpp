@@ -141,7 +141,7 @@ void hear_end(bool hear_flag, string desired_command);
 
 void hear_chess(bool hear_flag, string desired_command);
 
-void hear_feedback(bool hear_flag, string desired_command);
+string hear_feedback(bool hear_flag, string desired_command);
 
 string hear_command(bool hear_flag, string desired_command);
 

@@ -130,20 +130,16 @@ int main(){
   main_state = 1;
 
   // TESTING CONFIRMATION!!!
-  hear_feedback(hear_flag, desired_command);
 
   //start listening, until hear begin 
   hear_begin(hear_flag, desired_command);
 
   display_msg = "11";
 
-  // shared_memory_content = string(data);
-  // if(shared_memory_content == "None"){
-  //   strncpy(data, "11", SHM_SIZE);
-  // }
   read_and_write_in_shared_memory("11");
 
   while(1){
+    read_and_write_in_shared_memory("35");
 
     // Listening until hear chess
     hear_chess(hear_flag, desired_command);
@@ -151,14 +147,22 @@ int main(){
     display_msg = "332Listening";
 
     //Comando para o front trocar a cor e indicar que está esperando o resto do comando;
-    // shared_memory_content = string(data);
-    // if(shared_memory_content == "None"){
-    //   strncpy(data, display_msg.c_str(), SHM_SIZE);
-    // }
-      if(!read_and_write_in_shared_memory(display_msg)){break;}
+    if(!read_and_write_in_shared_memory(display_msg)){break;}
 
     // TODO Add loop to hear while == "invalid grammar"
     string listened_command = hear_command(hear_flag, desired_command);
+  
+  //////////////// CONFIRMATION //////////////////////////////
+    
+    read_and_write_in_shared_memory("342" + listened_command);
+    //string feedback = hear_feedback();
+    string feedback = hear_feedback(hear_flag, desired_command);
+    
+    if(feedback == "repeat"){
+      continue;      
+    }
+
+  //////////////// CONFIRMATION //////////////////////////////
 
     main_state = 2;
 
@@ -168,10 +172,6 @@ int main(){
     if(is_a_valid_movement){
       display_msg = "312" + listened_command;
 
-      // shared_memory_content = string(data);
-      // if(shared_memory_content == "None"){
-      //   strncpy(data, display_msg.c_str(), SHM_SIZE);
-      // }
       if(!read_and_write_in_shared_memory(display_msg)){break;}
 
       x_origin_point = (motion_validator.number_coordinates[coordinates[1]] * 2) + 1;
@@ -243,10 +243,6 @@ int main(){
 
       display_msg = "302" + listened_command;
 
-      // shared_memory_content = string(data);
-      // if(shared_memory_content == "None"){
-      //   strncpy(data, display_msg.c_str(), SHM_SIZE);
-      // }
       if(!read_and_write_in_shared_memory(display_msg)){break;}
 
       main_state = 1;

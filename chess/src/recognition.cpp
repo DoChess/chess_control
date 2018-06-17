@@ -221,11 +221,13 @@ void hear_chess(bool hear_flag, string desired_command) {
   desired_command = voice(hear_flag, desired_command);
 }
 
-void hear_feedback(bool hear_flag, string desired_command) {
+string hear_feedback(bool hear_flag, string desired_command) {
 	printf("Waiting for %s\n", FEEDBACK_COMMAND.c_str());
   hear_flag = true;
   desired_command = FEEDBACK_COMMAND;
   desired_command = voice(hear_flag, desired_command);
+  
+  return desired_command;
 }
 
 string hear_command(bool hear_flag, string desired_command) {
