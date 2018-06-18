@@ -139,7 +139,7 @@ int main(){
   read_and_write_in_shared_memory("11");
 
   while(1){
-    read_and_write_in_shared_memory("35");
+    //read_and_write_in_shared_memory("35");
 
     // Listening until hear chess
     hear_chess(hear_flag, desired_command);
@@ -159,6 +159,7 @@ int main(){
     string feedback = hear_feedback(hear_flag, desired_command);
     
     if(feedback == "repeat"){
+      read_and_write_in_shared_memory("35");
       continue;      
     }
 
