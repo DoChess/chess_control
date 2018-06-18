@@ -4,6 +4,7 @@
 #include <sstream>
 #include "../include/motion_validation.hpp"
 #include "../utils/shared_memory.cpp"
+//#include "../utils/microphone_controller.cpp"
 #include "../include/motion_control.hpp"
 #include "../include/communication.hpp"
 
@@ -88,7 +89,6 @@ bool read_and_write_in_shared_memory(string write_data){
 }
 
 int main(){
-  // Investigate why it musts be inside main
   queue<string> commands_queue;
   string desired_command = HEAR_ERROR;
   bool hear_flag = false;
@@ -100,7 +100,6 @@ int main(){
   MotionControl motion_control = MotionControl(chess_board, points_chess_board,
       commands_queue);
 
-  char main_state;
   queue<string> front_messages;
   bool fix_on_grammar;
   int turn = 0;
@@ -113,24 +112,15 @@ int main(){
   string display_msg = "";
 
   // Added to be used on movimentation
-  int x_origin_point;
-  int y_origin_point;
-  int x_destiny_point;
-  int y_destiny_point;
-  int x_origin;
-  int y_origin; 
-  int x_destiny;
-  int y_destiny;
+  int x_origin_point; int y_origin_point;
+  int x_destiny_point; int y_destiny_point;
+  int x_origin; int y_origin; int x_destiny;int y_destiny;
 
-  bool is_a_capture_movement;
-  bool is_a_valid_movement;
+  bool is_a_capture_movement;bool is_a_valid_movement;
 
   string shared_memory_content;
 
-  main_state = 1;
-
-  // TESTING CONFIRMATION!!!
-
+  //choose_device(turn);
   //start listening, until hear begin 
   hear_begin(hear_flag, desired_command);
 
@@ -139,6 +129,7 @@ int main(){
   read_and_write_in_shared_memory("11");
 
   while(1){
+
     //read_and_write_in_shared_memory("35");
 
     // Listening until hear chess
@@ -149,11 +140,8 @@ int main(){
     //Comando para o front trocar a cor e indicar que está esperando o resto do comando;
     if(!read_and_write_in_shared_memory(display_msg)){break;}
 
-    // TODO Add loop to hear while == "invalid grammar"
     string listened_command = hear_command(hear_flag, desired_command);
   
-  //////////////// CONFIRMATION //////////////////////////////
-    
     read_and_write_in_shared_memory("342" + listened_command);
     //string feedback = hear_feedback();
     string feedback = hear_feedback(hear_flag, desired_command);
@@ -162,10 +150,6 @@ int main(){
       read_and_write_in_shared_memory("35");
       continue;      
     }
-
-  //////////////// CONFIRMATION //////////////////////////////
-
-    main_state = 2;
 
     vector<string> coordinates = split_command(listened_command);
     is_a_valid_movement = motion_validator.validate_command(coordinates[1],coordinates[0], coordinates[3], coordinates[2], turn);
@@ -188,8 +172,6 @@ int main(){
       // Calculating commands to send to microcontroller
       motion_control.generate_commands(x_origin_point, y_origin_point, x_destiny_point,
           y_destiny_point, CNC_position.first, CNC_position.second, turn);
-
-      main_state = 3;
 
       printf("CHESS STATE BEFORE MOVING\n");
       print_actual_chess_board(motion_validator);
@@ -236,17 +218,18 @@ int main(){
 
       }
 
+      print_actual_chess_board(motion_validator);
+      print_actual_chess_board(motion_validator);
+
       // Change player
       turn = 1 - turn;
-      main_state = 1;
+      //choose_device(turn);
     } else {
       printf("THE COMMAND IS INVALID! PLEASE GIVE ANOTHER COMMAND!\n");
 
       display_msg = "302" + listened_command;
 
       if(!read_and_write_in_shared_memory(display_msg)){break;}
-
-      main_state = 1;
     }
   }
 

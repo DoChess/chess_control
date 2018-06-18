@@ -33,13 +33,6 @@ void attach_memory(){
     exit(1);
   }
 
-  ///* read or modify the segment, based on the command line: */
-  //if (argc == 2) {
-  //  printf("writing to segment: \"%s\"\n", argv[1]);
-  //  strncpy(data, argv[1], SHM_SIZE);
-  //} else
-  //  printf("segment contains: \"%s\"\n", data);
-
 }
 
 void detach_memory(){
