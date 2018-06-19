@@ -49,7 +49,7 @@ void initialize_statements(){
     }
   }
 
-  CNC_position = make_pair(0, 0);
+  CNC_position = make_pair(16, 0);
 }
 
 vector<string> split_command(string full_message){
@@ -78,7 +78,6 @@ void print_actual_chess_board(MotionValidation motion_validator){
 
 bool read_and_write_in_shared_memory(string write_data){
   string shared_memory_content = string(data);
-  // cout << "Read and write data!!! Pegando a informação =" << shared_memory_content << " " << write_data << endl;
   cout << "Este é o valor  do shared_memory_content = " << shared_memory_content << endl;
   if(shared_memory_content == "None"){
     strncpy(data, write_data.c_str(), SHM_SIZE);
@@ -111,7 +110,6 @@ int main(){
 
   string display_msg = "";
 
-  // Added to be used on movimentation
   int x_origin_point; int y_origin_point;
   int x_destiny_point; int y_destiny_point;
   int x_origin; int y_origin; int x_destiny;int y_destiny;
@@ -120,8 +118,6 @@ int main(){
 
   string shared_memory_content;
 
-  //choose_device(turn);
-  //start listening, until hear begin 
   hear_begin(hear_flag, desired_command);
 
   display_msg = "11";
@@ -129,10 +125,8 @@ int main(){
   read_and_write_in_shared_memory("11");
 
   while(1){
+    read_and_write_in_shared_memory("35");
 
-    //read_and_write_in_shared_memory("35");
-
-    // Listening until hear chess
     hear_chess(hear_flag, desired_command);
 
     display_msg = "332Listening";
@@ -143,7 +137,6 @@ int main(){
     string listened_command = hear_command(hear_flag, desired_command);
   
     read_and_write_in_shared_memory("342" + listened_command);
-    //string feedback = hear_feedback();
     string feedback = hear_feedback(hear_flag, desired_command);
     
     if(feedback == "repeat"){
@@ -173,15 +166,10 @@ int main(){
       motion_control.generate_commands(x_origin_point, y_origin_point, x_destiny_point,
           y_destiny_point, CNC_position.first, CNC_position.second, turn);
 
-      printf("CHESS STATE BEFORE MOVING\n");
-      print_actual_chess_board(motion_validator);
-      printf("\n\n");
-
       printf("SENDING COMMANDS TO MICROCONTROLLER:\n\n");
       while(not commands_queue.empty()){
         string word = commands_queue.front(); commands_queue.pop();
-        cout << "Mandando " << word << endl;
-        //send_command(word);
+        send_command(word);
       }
       printf("\n\nALL COMMANDS SENT TO MICROCONTROLLER.\n\n");
 
@@ -195,17 +183,12 @@ int main(){
       sent_commands_counter++;
       // Sending CNC to initial position
       if(sent_commands_counter == 4){
-        commands_queue.push("G4");
-        CNC_position.first = 0;
+        send_command("G4");
+
+        CNC_position.first = 16;
         CNC_position.second = 0;
         sent_commands_counter = 0;
-
-        // TODO add method to send to CNC here
-        commands_queue.pop();
       }
-
-      printf("CHESS STATE AFTER MOVING\n");
-      print_actual_chess_board(motion_validator);
 
       display_msg = "14";
 
@@ -215,20 +198,13 @@ int main(){
           strncpy(data, display_msg.c_str(), SHM_SIZE);
           break;
         }
-
       }
-
-      print_actual_chess_board(motion_validator);
-      print_actual_chess_board(motion_validator);
 
       // Change player
       turn = 1 - turn;
-      //choose_device(turn);
     } else {
-      printf("THE COMMAND IS INVALID! PLEASE GIVE ANOTHER COMMAND!\n");
-
+      // Comand is invalid
       display_msg = "302" + listened_command;
-
       if(!read_and_write_in_shared_memory(display_msg)){break;}
     }
   }

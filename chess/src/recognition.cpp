@@ -1,4 +1,5 @@
 #include "../include/recognition.hpp"
+#include "iostream"
 
 using namespace std;
 
@@ -63,7 +64,6 @@ static void sleep_msec(int32 ms)
  *     }
  */
 
-// TODO send return when fail to match grammar
 static string recognize_from_microphone(bool hear_flag, string desired_command)
 {
   // Returns the value talked. !ERROR!->BAD word->GOOD
@@ -85,7 +85,7 @@ static string recognize_from_microphone(bool hear_flag, string desired_command)
   if (ps_start_utt(ps) < 0)
     E_FATAL("Failed to start utterance\n");
   utt_started = FALSE;
-  E_INFO("Ready....\n");
+ // printf("Ready na mão....\n");
 
   // Control listening.
   while(hear_flag){
@@ -98,6 +98,7 @@ static string recognize_from_microphone(bool hear_flag, string desired_command)
     // If have someone talking and not statarted to hear. So start 
     // listening.
     if (in_speech && !utt_started) {
+      //printf("Entrou no primeiro\n");
       utt_started = TRUE;
       E_INFO("Listening...\n");
       printf("Listening...\n");
@@ -106,6 +107,7 @@ static string recognize_from_microphone(bool hear_flag, string desired_command)
     // If no one is talking and is hearing. So stop it, and print the 
     // result.
     if (!in_speech && utt_started) {
+      //printf("Entrou no segundo\n");
       /* speech -> silence transition, time to start new utterance  */
       ps_end_utt(ps);
       hyp = ps_get_hyp(ps, NULL );

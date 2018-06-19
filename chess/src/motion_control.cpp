@@ -4,21 +4,20 @@ void MotionControl::generate_commands(int x_origin, int y_origin,
                                       int x_destiny, int y_destiny,
                                       int CNC_x, int CNC_y, int turn){
 
-  par free_cemetery = (not turn? get_black_free_cemetery() : get_white_free_cemetery());
-
-  int x_out = free_cemetery.first;
-  int y_out = free_cemetery.second;
 
   bool is_a_capture = is_it_a_capture_movement(x_destiny, y_destiny);
 
   if(is_a_capture){
+    par free_cemetery = (not turn? get_black_free_cemetery() : get_white_free_cemetery());
+
+    int x_out = free_cemetery.first;
+    int y_out = free_cemetery.second;
     // Moving CNC to origin cell
     switch_off_magnet();
     get_path(CNC_x, CNC_y, x_destiny, y_destiny);
 
     // Moving captured piece from destiny cell to out
-    // Need to implement
-    switch_off_magnet();
+    switch_on_magnet();
     get_path(x_destiny, y_destiny, x_out, y_out);
 
     // Moving from out cell to origin cell

@@ -13,6 +13,8 @@ compile with the command: gcc demo_rx.c rs232.c -Wall -Wextra -o2 -o test_rx
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <sstream>
+#include <iostream>
 #include "../include/communication.hpp"
 #include "../include/rs232.hpp"
 
@@ -33,20 +35,70 @@ void open_comport(){
   }
 }
 
+string get_displacement(string text_piece){
+  string number = "";
+
+  if(text_piece[1] == '-'){
+    if(text_piece.size() == 4){
+      number += text_piece[2]; number += text_piece[3];
+    }else if(text_piece.size() == 3){
+      number += text_piece[2];
+    }
+  }else{
+    if(text_piece.size() == 3){
+      number += text_piece[1]; number += text_piece[2];
+    }else if(text_piece.size() == 2){
+      number += text_piece[1];
+    }
+  }
+
+  return number;
+}
+
+string translate_to_cartesian_coordinates(string command){
+  stringstream ss(command);
+
+  string translated_command = "", text_piece;
+  string x_displacement = "", y_displacement = "";
+  string number;
+
+  while(ss >> text_piece){
+
+    if(text_piece[0] == 'G') translated_command += (text_piece + ' ');
+    else if(text_piece[0] == 'X'){
+      number = get_displacement(text_piece);
+      if(text_piece[1] != '-')  y_displacement = (number != "0"?("Y-" + number):("Y0"));
+      else y_displacement = "Y" + number;
+    }else if(text_piece[0] == 'Y'){
+      number = get_displacement(text_piece);
+      if(text_piece[1] == '-') x_displacement = (number != "0"?("X-" + number + " "):("X0 "));
+      else x_displacement = "X" + number + " ";
+    }
+  }
+
+  return translated_command + x_displacement + y_displacement;
+}
+
 void send_command(string command){
-  //printf("O comando foi %s\n",command.c_str());
+  if(command.size() > 3){
+    command = translate_to_cartesian_coordinates(command);
+  }
+
+  printf("Enviando comando %s\n", command.c_str());
+
+  return;
 
   int command_confirmed = 0;
   string system_call = "echo -n '"  + command + ".' > /dev/rfcomm2";
 
-  printf("1 - Enviando o comando %s\n", system_call.c_str()); 
+  printf("Sending command: %s.\n", system_call.c_str());
 
   for(i = 0;i < 3;++i){
     //system("echo -n 'G0 X7 Y0.' > /dev/rfcomm2");
     system(system_call.c_str());
   }
 
-  printf("2 - Comando foi enviado\n");
+  printf("Command sent.\n");
 
   while(1){
     n = RS232_PollComport(cport_nr, buf, 100); // Number of read bytes
@@ -63,19 +115,18 @@ void send_command(string command){
         }
       }
 
-      printf("Recebidos %i bytes: %s\n", n, (char *)buf);
+      printf("%i bytes received: %s\n", n, (char *)buf);
 
       for(i = 0;i < n;++i){
         if(buf[i] == 'S'){
-          printf("3 - Sinal de confirmação recebido.\n");
+          printf("Confirmation signal received.\n");
           command_confirmed = 1;
           break;
         }
       }
       if(command_confirmed) break;
-      else printf("X - Sinal de confirmação não foi recebido.\n");
+      else printf("Confirmation signal not received.\n");
     }
   }
-
 }
 
