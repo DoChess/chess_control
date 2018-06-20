@@ -78,138 +78,150 @@ void print_actual_chess_board(MotionValidation motion_validator){
 
 bool read_and_write_in_shared_memory(string write_data){
   string shared_memory_content = string(data);
+
   cout << "Este é o valor  do shared_memory_content = " << shared_memory_content << endl;
-  if(shared_memory_content == "None"){
+
+  if(shared_memory_content == "None")
+  {
     strncpy(data, write_data.c_str(), SHM_SIZE);
-  } else if (shared_memory_content == "15"){
+  }
+  else if (shared_memory_content == "15")
+  {
+    char none[5] = "None";
+    strncpy(data, none, SHM_SIZE);
     return false;
   }
+
   return true;
 }
 
 int main(){
-  queue<string> commands_queue;
-  string desired_command = HEAR_ERROR;
-  bool hear_flag = false;
+  short qtd_matches = 0;
+  while (qtd_matches < 2) {
+    queue<string> commands_queue;
+    string desired_command = HEAR_ERROR;
+    bool hear_flag = false;
 
-  initialize_statements();
-  MotionValidation motion_validator = MotionValidation(chess_board);
-  motion_validator.initialize_dictionaries();
+    initialize_statements();
+    MotionValidation motion_validator = MotionValidation(chess_board);
+    motion_validator.initialize_dictionaries();
 
-  MotionControl motion_control = MotionControl(chess_board, points_chess_board,
-      commands_queue);
+    MotionControl motion_control = MotionControl(chess_board, points_chess_board,
+        commands_queue);
 
-  queue<string> front_messages;
-  bool fix_on_grammar;
-  int turn = 0;
-  int sent_commands_counter = 0;
+    queue<string> front_messages;
+    bool fix_on_grammar;
+    int turn = 0;
+    int sent_commands_counter = 0;
 
-  initialize_statements();
-  attach_memory();
-  //open_comport();
+    initialize_statements();
+    attach_memory();
+    //open_comport();
 
-  string display_msg = "";
+    string display_msg = "";
 
-  int x_origin_point; int y_origin_point;
-  int x_destiny_point; int y_destiny_point;
-  int x_origin; int y_origin; int x_destiny;int y_destiny;
+    int x_origin_point; int y_origin_point;
+    int x_destiny_point; int y_destiny_point;
+    int x_origin; int y_origin; int x_destiny;int y_destiny;
 
-  bool is_a_capture_movement;bool is_a_valid_movement;
+    bool is_a_capture_movement;bool is_a_valid_movement;
 
-  string shared_memory_content;
+    string shared_memory_content;
 
-  hear_begin(hear_flag, desired_command);
+    hear_begin(hear_flag, desired_command);
 
-  display_msg = "11";
+    display_msg = "11";
 
-  read_and_write_in_shared_memory("11");
+    read_and_write_in_shared_memory("11");
 
-  while(1){
-    read_and_write_in_shared_memory("35");
+    while(1){
+      //if(!read_and_write_in_shared_memory("35")){break;}
 
-    hear_chess(hear_flag, desired_command);
+      hear_chess(hear_flag, desired_command);
 
-    display_msg = "332Listening";
+      display_msg = "332Listening";
 
-    //Comando para o front trocar a cor e indicar que está esperando o resto do comando;
-    if(!read_and_write_in_shared_memory(display_msg)){break;}
-
-    string listened_command = hear_command(hear_flag, desired_command);
-  
-    read_and_write_in_shared_memory("342" + listened_command);
-    string feedback = hear_feedback(hear_flag, desired_command);
-    
-    if(feedback == "repeat"){
-      read_and_write_in_shared_memory("35");
-      continue;      
-    }
-
-    vector<string> coordinates = split_command(listened_command);
-    is_a_valid_movement = motion_validator.validate_command(coordinates[1],coordinates[0], coordinates[3], coordinates[2], turn);
-
-    if(is_a_valid_movement){
-      display_msg = "312" + listened_command;
-
+      //Comando para o front trocar a cor e indicar que está esperando o resto do comando;
       if(!read_and_write_in_shared_memory(display_msg)){break;}
 
-      x_origin_point = (motion_validator.number_coordinates[coordinates[1]] * 2) + 1;
-      y_origin_point = (motion_validator.fonetic_alphabet_coordinates[coordinates[0]] * 2) + 1;
-      x_destiny_point = (motion_validator.number_coordinates[coordinates[3]] * 2) + 1;
-      y_destiny_point = (motion_validator.fonetic_alphabet_coordinates[coordinates[2]] * 2) + 1;
+      string listened_command = hear_command(hear_flag, desired_command);
 
-      x_origin = motion_validator.number_coordinates[coordinates[1]];
-      y_origin = motion_validator.fonetic_alphabet_coordinates[coordinates[0]];
-      x_destiny = motion_validator.number_coordinates[coordinates[3]];
-      y_destiny = motion_validator.fonetic_alphabet_coordinates[coordinates[2]];
+      if(!read_and_write_in_shared_memory("342" + listened_command)){break;}
+      string feedback = hear_feedback(hear_flag, desired_command);
 
-      // Calculating commands to send to microcontroller
-      motion_control.generate_commands(x_origin_point, y_origin_point, x_destiny_point,
-          y_destiny_point, CNC_position.first, CNC_position.second, turn);
-
-      printf("SENDING COMMANDS TO MICROCONTROLLER:\n\n");
-      while(not commands_queue.empty()){
-        string word = commands_queue.front(); commands_queue.pop();
-        send_command(word);
-      }
-      printf("\n\nALL COMMANDS SENT TO MICROCONTROLLER.\n\n");
-
-      chess_board[x_destiny][y_destiny] = chess_board[x_origin][y_origin];
-      chess_board[x_origin][y_origin] = 0;
-
-      // Update CNC position in memory
-      CNC_position.first = x_destiny_point;
-      CNC_position.second = y_destiny_point;
-
-      sent_commands_counter++;
-      // Sending CNC to initial position
-      if(sent_commands_counter == 4){
-        send_command("G4");
-
-        CNC_position.first = 16;
-        CNC_position.second = 0;
-        sent_commands_counter = 0;
+      if(feedback == "repeat"){
+        if(!read_and_write_in_shared_memory("35")){break;}
+        continue;      
       }
 
-      display_msg = "14";
+      vector<string> coordinates = split_command(listened_command);
+      is_a_valid_movement = motion_validator.validate_command(coordinates[1],coordinates[0], coordinates[3], coordinates[2], turn);
 
-      while(1){
-        shared_memory_content = string(data);
-        if(shared_memory_content == "None"){
-          strncpy(data, display_msg.c_str(), SHM_SIZE);
-          break;
+      if(is_a_valid_movement){
+        display_msg = "312" + listened_command;
+
+        if(!read_and_write_in_shared_memory(display_msg)){break;}
+
+        x_origin_point = (motion_validator.number_coordinates[coordinates[1]] * 2) + 1;
+        y_origin_point = (motion_validator.fonetic_alphabet_coordinates[coordinates[0]] * 2) + 1;
+        x_destiny_point = (motion_validator.number_coordinates[coordinates[3]] * 2) + 1;
+        y_destiny_point = (motion_validator.fonetic_alphabet_coordinates[coordinates[2]] * 2) + 1;
+
+        x_origin = motion_validator.number_coordinates[coordinates[1]];
+        y_origin = motion_validator.fonetic_alphabet_coordinates[coordinates[0]];
+        x_destiny = motion_validator.number_coordinates[coordinates[3]];
+        y_destiny = motion_validator.fonetic_alphabet_coordinates[coordinates[2]];
+
+        // Calculating commands to send to microcontroller
+        motion_control.generate_commands(x_origin_point, y_origin_point, x_destiny_point,
+            y_destiny_point, CNC_position.first, CNC_position.second, turn);
+
+        printf("SENDING COMMANDS TO MICROCONTROLLER:\n\n");
+        while(not commands_queue.empty()){
+          string word = commands_queue.front(); commands_queue.pop();
+          send_command(word);
         }
+        printf("\n\nALL COMMANDS SENT TO MICROCONTROLLER.\n\n");
+
+        chess_board[x_destiny][y_destiny] = chess_board[x_origin][y_origin];
+        chess_board[x_origin][y_origin] = 0;
+
+        // Update CNC position in memory
+        CNC_position.first = x_destiny_point;
+        CNC_position.second = y_destiny_point;
+
+        sent_commands_counter++;
+        // Sending CNC to initial position
+        if(sent_commands_counter == 4){
+          send_command("G4");
+
+          CNC_position.first = 16;
+          CNC_position.second = 0;
+          sent_commands_counter = 0;
+        }
+
+        display_msg = "14";
+
+        while(1){
+          shared_memory_content = string(data);
+          if(shared_memory_content == "None"){
+            strncpy(data, display_msg.c_str(), SHM_SIZE);
+            break;
+          }
+        }
+
+        // Change player
+        turn = 1 - turn;
+      } else {
+        // Comand is invalid
+        display_msg = "302" + listened_command;
+        if(!read_and_write_in_shared_memory(display_msg)){break;}
       }
-
-      // Change player
-      turn = 1 - turn;
-    } else {
-      // Comand is invalid
-      display_msg = "302" + listened_command;
-      if(!read_and_write_in_shared_memory(display_msg)){break;}
     }
-  }
 
-  detach_memory();
+    detach_memory();
+    qtd_matches++;
+  }
 
   return 0;
 }
