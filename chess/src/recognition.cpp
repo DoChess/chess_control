@@ -97,8 +97,7 @@ static string recognize_from_microphone(bool hear_flag, string desired_command)
 
     // If have someone talking and not statarted to hear. So start 
     // listening.
-    //if (in_speech && !utt_started) {
-    if (in_speech) {
+    if (in_speech && !utt_started) {
       //printf("Entrou no primeiro\n");
       utt_started = TRUE;
       E_INFO("Listening...\n");

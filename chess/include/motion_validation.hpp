@@ -33,7 +33,7 @@ class MotionValidation {
     bool the_piece_is_mine(int, int, int);
     bool the_piece_can_do_it(int, int, int, int, int);
     void verify_check_for_all_pieces(int);
-    bool verify_if_king_continues_in_check(int, int, int, int);
+    bool verify_if_king_continues_in_check(int, int, int, int, int);
     void its_possible_to_defend_king(int, int, int, int, int);
 };
 

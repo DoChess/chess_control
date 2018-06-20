@@ -140,15 +140,16 @@ void MotionValidation::its_possible_to_defend_king(int x_origin,
 bool MotionValidation::verify_if_king_continues_in_check(int x_origin,
     int y_origin,
     int x_destiny,
-    int y_destiny){
+    int y_destiny,
+    int turn){
 
-  if(is_in_check.first){
+  if(!turn and is_in_check.first){
     is_in_check.first = 0;
     its_possible_to_defend_king(x_origin, y_origin, x_destiny ,y_destiny, 0); 
 
     return (is_in_check.first == 0);
 
-  }else if(is_in_check.second){
+  }else if(turn and is_in_check.second){
     is_in_check.second = 0;
     its_possible_to_defend_king(x_origin, y_origin, x_destiny ,y_destiny, 1); 
 
@@ -167,7 +168,7 @@ bool MotionValidation::validate_command(string x_origin, string y_origin,
   if(is_there_a_piece_at_origin(x, y) and
     the_piece_is_mine(x, y, turn) and
     the_piece_can_do_it(x, y, z, k, turn) and
-    verify_if_king_continues_in_check(x, y, z, k)){
+    verify_if_king_continues_in_check(x, y, z, k, turn)){
     return true;
   }else{
     return false;
