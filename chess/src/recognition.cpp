@@ -87,6 +87,8 @@ static string recognize_from_microphone(bool hear_flag, string desired_command)
   utt_started = FALSE;
  // printf("Ready na mão....\n");
 
+  int cont = 0;
+
   // Control listening.
   while(hear_flag){
     if ((k = ad_read(ad, adbuf, 2048)) < 0){
@@ -97,7 +99,7 @@ static string recognize_from_microphone(bool hear_flag, string desired_command)
 
     // If have someone talking and not statarted to hear. So start 
     // listening.
-    if (in_speech && !utt_started) {
+    if (in_speech && !utt_started && cont) {
       //printf("Entrou no primeiro\n");
       utt_started = TRUE;
       E_INFO("Listening...\n");
@@ -106,7 +108,8 @@ static string recognize_from_microphone(bool hear_flag, string desired_command)
 
     // If no one is talking and is hearing. So stop it, and print the 
     // result.
-    if (!in_speech && utt_started) {
+    //if (!in_speech && utt_started) {
+    if (!in_speech) {
       //printf("Entrou no segundo\n");
       /* speech -> silence transition, time to start new utterance  */
       ps_end_utt(ps);
@@ -148,6 +151,7 @@ static string recognize_from_microphone(bool hear_flag, string desired_command)
       printf("Ready....\n");
     }
     sleep_msec(100);
+    cont = 1;
   }
   ad_close(ad);
   return command;
