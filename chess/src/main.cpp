@@ -192,7 +192,11 @@ int main(){
         CNC_position.second = y_destiny_point;
 
         // Verify if Check Mate ocurred
-        //bool checkmate_occurred = is_a_check_mate(turn, motion_validator);
+        bool checkmate_occurred = is_a_check_mate(turn, motion_validator);
+        if(checkmate_occurred){
+          bool status_memory = read_and_write_in_shared_memory("17");
+          break;
+        }
 
         sent_commands_counter++;
         // Sending CNC to initial position

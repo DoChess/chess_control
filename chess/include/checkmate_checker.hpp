@@ -35,7 +35,7 @@ static map<int, string> number_words = {
 vector<coordinate> look_for_threat_pieces(int turn, coordinate , MotionValidation &);
 bool try_to_scape_moving_king(coordinate, coordinate, int, MotionValidation &);
 bool try_to_capture_threat_piece(coordinate, int, MotionValidation &);
-bool try_to_move_piece_to_blocking_position(coordinate, int, MotionValidation &);
+bool try_to_move_piece_to_blocking_position(int, int, int, MotionValidation &);
 bool try_to_put_piece_in_the_way(coordinate, coordinate, int, MotionValidation &);
 bool is_a_check_mate(int, MotionValidation &);
 

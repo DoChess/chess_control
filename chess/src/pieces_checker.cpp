@@ -3,7 +3,8 @@
 bool PiecesChecker::look_for_pieces_in_the_way_bishop(int x1, int x2, int y1, int y2){
   int p1 = x1;
   int p2 = y1;
-  for(int k = 0;k < (x1 - x2) - 1;++k){
+
+  for(int k = 0;k < abs(x1 - x2) - 1;++k){
     if(x1 < x2){
       if(y1 < y2){
         p1++;
@@ -70,7 +71,7 @@ bool PiecesChecker::pawn_checker(int x1, int y1, int x2, int y2, int turn){
   bool is_a_valid_movement = false;
 
   if(y1 == y2 and ((abs(x1 - x2) == 2 and (x1 == 1 or x1 == 6)) or 
-        (abs(x1 - x2) == 1))){
+        (abs(x1 - x2) == 1)) and chess_board[x2][y2] == 0){
     if(not turn){
       if(x2 > x1){
         is_a_valid_movement = true;
@@ -85,6 +86,14 @@ bool PiecesChecker::pawn_checker(int x1, int y1, int x2, int y2, int turn){
         if(chess_board[x1+1][y1] != 0) is_a_valid_movement = false;
       }else if(turn){
         if(chess_board[x1-1][y1] != 0) is_a_valid_movement = false;
+      }
+    }
+  }else{
+    if(abs(y2 - y1) == 1){
+      if(!turn){
+        if(chess_board[x2][y2] >= 7 and chess_board[x2][y2] <= 12 and x2 > x1 and abs(x1-x2) == 1) is_a_valid_movement = true;
+      }else{
+        if(chess_board[x2][y2] > 0 and chess_board[x2][y2] <= 6 and x1 > x2 and abs(x1-x2) == 1) is_a_valid_movement = true;
       }
     }
   }

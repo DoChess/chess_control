@@ -160,6 +160,7 @@ bool MotionValidation::verify_if_king_continues_in_check(int x_origin,
 
 bool MotionValidation::validate_command(string x_origin, string y_origin,
   string x_destiny, string y_destiny, int turn){
+  
   int x = number_coordinates[x_origin];
   int y = fonetic_alphabet_coordinates[y_origin];
   int z = number_coordinates[x_destiny];
