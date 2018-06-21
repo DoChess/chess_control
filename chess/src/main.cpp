@@ -7,6 +7,7 @@
 //#include "../utils/microphone_controller.cpp"
 #include "../include/motion_control.hpp"
 #include "../include/communication.hpp"
+#include "../include/checkmate_checker.hpp"
 
 // Voice recognition include.
 #include "../include/recognition.hpp"
@@ -189,6 +190,9 @@ int main(){
         // Update CNC position in memory
         CNC_position.first = x_destiny_point;
         CNC_position.second = y_destiny_point;
+
+        // Verify if Check Mate ocurred
+        //bool checkmate_occurred = is_a_check_mate(turn, motion_validator);
 
         sent_commands_counter++;
         // Sending CNC to initial position
