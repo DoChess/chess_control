@@ -50,7 +50,7 @@ void initialize_statements(){
     }
   }
 
-  CNC_position = make_pair(16, 0);
+  CNC_position = make_pair(0, 0);
 }
 
 vector<string> split_command(string full_message){
@@ -191,6 +191,8 @@ int main(){
         CNC_position.first = x_destiny_point;
         CNC_position.second = y_destiny_point;
 
+        print_actual_chess_board(motion_validator);
+
         // Verify if Check Mate ocurred
         bool checkmate_occurred = is_a_check_mate(turn, motion_validator);
         if(checkmate_occurred){
@@ -203,7 +205,7 @@ int main(){
         if(sent_commands_counter == 4){
           send_command("G4");
 
-          CNC_position.first = 16;
+          CNC_position.first = 0;
           CNC_position.second = 0;
           sent_commands_counter = 0;
         }

@@ -16,7 +16,7 @@ static map<int, string> fonetic_words = {
   {2 , "CHARLIE"},
   {3 , "DELTA"},
   {4 , "ECHO"},
-  {5 , "FOXTROT"},
+  {5 , "FUNNY"},
   {6 , "GOLF"},
   {7 , "HOTEL"}
 };

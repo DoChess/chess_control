@@ -14,7 +14,7 @@ void MotionValidation::initialize_dictionaries(){
    {"CHARLIE" , 2},
    {"DELTA" , 3},
    {"ECHO" , 4},
-   {"FOXTROT" , 5},
+   {"FUNNY" , 5},
    {"GOLF" , 6},
    {"HOTEL" , 7}
   };

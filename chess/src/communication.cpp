@@ -80,9 +80,9 @@ string translate_to_cartesian_coordinates(string command){
 }
 
 void send_command(string command){
-  if(command.size() > 3){
-    command = translate_to_cartesian_coordinates(command);
-  }
+  //if(command.size() > 3){
+  //  command = translate_to_cartesian_coordinates(command);
+  //}
 
   printf("Enviando comando %s\n", command.c_str());
 
