@@ -30,14 +30,14 @@ using coordinate = pair<int,int>;
 #define BLACK_KING 11
 #define BLACK_PAWN 12
 
-int chess_board[8][8] = {{1,2,3,4,5,3,2,1},
-  {6,6,6,6,6,6,6,6},
-  {0,0,0,0,0,0,0,0},
-  {0,0,0,0,0,0,0,0},
-  {0,0,0,0,0,0,0,0},
-  {0,0,0,0,0,0,0,0},
-  {12,12,12,12,12,12,12,12},
-  {7,8,9,10,11,9,8,7}};
+int chess_board[8][8] = {{1 ,2 ,3 ,4 ,5 ,3 ,2 ,1 },
+                         {6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 },
+                         {0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 },
+                         {0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 },
+                         {0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 },
+                         {0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 },
+                         {12,12,12,12,12,12,12,12},
+                         {7 ,8 ,9 ,10,11,9 ,8 ,7 }};
 
 int points_chess_board[17][17];
 coordinate CNC_position;
@@ -117,7 +117,7 @@ int main(){
 
     initialize_statements();
     attach_memory();
-    //open_comport();
+    open_comport();
 
     string display_msg = "";
 
@@ -128,6 +128,8 @@ int main(){
     bool is_a_capture_movement;bool is_a_valid_movement;
 
     string shared_memory_content;
+
+    send_command("G4");
 
     hear_begin(hear_flag, desired_command);
 

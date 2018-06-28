@@ -85,8 +85,7 @@ void send_command(string command){
   //}
 
   printf("Enviando comando %s\n", command.c_str());
-
-  return;
+  if(command == "GO X0 Y0" or command == "G1 X0 Y0") return;
 
   int command_confirmed = 0;
   string system_call = "echo -n '"  + command + ".' > /dev/rfcomm2";
