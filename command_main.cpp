@@ -115,7 +115,7 @@ int main(int argc, char *argv[]){
 
   initialize_statements();
   attach_memory();
-  //open_comport();
+  open_comport();
 
   string display_msg = "";
 
@@ -134,7 +134,7 @@ int main(int argc, char *argv[]){
 
   int next_command = 0;
 
-  //send_command("G4");
+  send_command("G4");
 
   while(1){
     string listened_command = all_commands[next_command];
@@ -166,7 +166,7 @@ int main(int argc, char *argv[]){
       while(not commands_queue.empty()){
         string word = commands_queue.front(); commands_queue.pop();
         cout << word << endl;
-        //send_command(word);
+        send_command(word);
       }
       printf("\n\nALL COMMANDS SENT TO MICROCONTROLLER.\n\n");
 
@@ -193,13 +193,12 @@ int main(int argc, char *argv[]){
       sent_commands_counter++;
       // Sending CNC to initial position
       if(sent_commands_counter == 4){
-        //send_command("G4");
+        send_command("G4");
 
         CNC_position.first = 0;
         CNC_position.second = 0;
         sent_commands_counter = 0;
 
-        break;
       }
 
       display_msg = "14";
