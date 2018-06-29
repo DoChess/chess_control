@@ -1,0 +1,1 @@
+sudo rfcomm bind /dev/rfcomm2 98:D3:31:70:0C:BE
