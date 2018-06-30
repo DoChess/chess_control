@@ -130,7 +130,9 @@ int main(int argc, char *argv[]){
   vector<string> all_commands = {"FUNNY SEVEN FUNNY SIX",
                                  "ECHO TWO ECHO FOUR",
                                  "GOLF SEVEN GOLF FIVE",
-                                 "DELTA ONE HOTEL FIVE"};
+                                 "FUNNY ONE ECHO TWO",
+                                 "BRAVO EIGHT CHARLIE SIX",
+                                 "ECHO TWO HOTEL FIVE"};
 
   int next_command = 0;
 
